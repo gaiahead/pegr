@@ -1,0 +1,12 @@
+{
+  "us": {
+    "required_return": 0.10,
+    "terminal_pe": 15.0,
+    "horizon_years": 10,
+    "assets": {
+      "AAPL": { "name": "Apple" },
+      "MSFT": { "name": "Microsoft" },
+      "BRK-B": { "name": "Berkshire Hathaway B" }
+    }
+  }
+}

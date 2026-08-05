@@ -1,0 +1,191 @@
+{
+  "updated": "2026-08-05 09:50 KST",
+  "market": "US",
+  "currency": "USD",
+  "required_return": 0.1,
+  "terminal_pe": 15.0,
+  "horizon_years": 10,
+  "assets": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "market": "US",
+      "currency": "USD",
+      "price": 303.420013,
+      "shares": 14594180000,
+      "market_cap": 4428166291566.77,
+      "normalized_net_income": 96995000000.0,
+      "shareholder_payout_ratio_pct": 95.4431,
+      "market_implied_cagr_pct": 18.316166,
+      "fair_market_cap": 4428166291566.77,
+      "fair_price": 303.420013,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 521423047708.3,
+      "payout_pv": 1412698936599.31,
+      "terminal_pv": 3015467354967.46,
+      "net_income_series": {
+        "2025-09-30": 112010000000.0,
+        "2024-09-30": 93736000000.0,
+        "2023-09-30": 96995000000.0
+      },
+      "payout_series": {
+        "2025-09-30": {
+          "net_income": 112010000000.0,
+          "cash_dividends": 15421000000.0,
+          "share_repurchases": 90711000000.0,
+          "share_issuance": 0.0,
+          "net_shareholder_payout": 106132000000.0,
+          "payout_ratio": 0.9475225426301223
+        },
+        "2024-09-30": {
+          "net_income": 93736000000.0,
+          "cash_dividends": 15234000000.0,
+          "share_repurchases": 94949000000.0,
+          "share_issuance": 0.0,
+          "net_shareholder_payout": 110183000000.0,
+          "payout_ratio": 1.1754608688230777
+        },
+        "2023-09-30": {
+          "net_income": 96995000000.0,
+          "cash_dividends": 15025000000.0,
+          "share_repurchases": 77550000000.0,
+          "share_issuance": 0.0,
+          "net_shareholder_payout": 92575000000.0,
+          "payout_ratio": 0.9544306407546781
+        }
+      },
+      "source": {
+        "provider": "yfinance",
+        "price": "fast_info.regularMarketPreviousClose",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock"
+        }
+      }
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "market": "US",
+      "currency": "USD",
+      "price": 487.649994,
+      "shares": 7425545491,
+      "market_cap": 3621067213364.22,
+      "normalized_net_income": 101832000000.0,
+      "shareholder_payout_ratio_pct": 39.7184,
+      "market_implied_cagr_pct": 17.763982,
+      "fair_market_cap": 3621067213364.22,
+      "fair_price": 487.649994,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 522407147866.52,
+      "payout_pv": 599908660214.83,
+      "terminal_pv": 3021158553149.39,
+      "net_income_series": {
+        "2026-06-30": 133749000000.0,
+        "2025-06-30": 101832000000.0,
+        "2024-06-30": 88136000000.0
+      },
+      "payout_series": {
+        "2026-06-30": {
+          "net_income": 133749000000.0,
+          "cash_dividends": 26445000000.0,
+          "share_repurchases": 22271000000.0,
+          "share_issuance": 2009000000.0,
+          "net_shareholder_payout": 46707000000.0,
+          "payout_ratio": 0.34921382589776373
+        },
+        "2025-06-30": {
+          "net_income": 101832000000.0,
+          "cash_dividends": 24082000000.0,
+          "share_repurchases": 18420000000.0,
+          "share_issuance": 2056000000.0,
+          "net_shareholder_payout": 40446000000.0,
+          "payout_ratio": 0.39718359651190194
+        },
+        "2024-06-30": {
+          "net_income": 88136000000.0,
+          "cash_dividends": 21771000000.0,
+          "share_repurchases": 17254000000.0,
+          "share_issuance": 2002000000.0,
+          "net_shareholder_payout": 37023000000.0,
+          "payout_ratio": 0.4200667150766996
+        }
+      },
+      "source": {
+        "provider": "yfinance",
+        "price": "fast_info.regularMarketPreviousClose",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock"
+        }
+      }
+    },
+    {
+      "ticker": "BRK-B",
+      "name": "Berkshire Hathaway B",
+      "market": "US",
+      "currency": "USD",
+      "price": 513.140015,
+      "shares": 2156853797,
+      "market_cap": 1106767988987.12,
+      "normalized_net_income": 88995000000.0,
+      "shareholder_payout_ratio_pct": 3.2788,
+      "market_implied_cagr_pct": 7.700854,
+      "fair_market_cap": 1106767988987.12,
+      "fair_price": 513.140015,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 186877526799.28,
+      "payout_pv": 26027342947.39,
+      "terminal_pv": 1080740646039.73,
+      "net_income_series": {
+        "2025-12-31": 66968000000.0,
+        "2024-12-31": 88995000000.0,
+        "2023-12-31": 96223000000.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 66968000000.0,
+          "cash_dividends": 0.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_shareholder_payout": 0.0,
+          "payout_ratio": 0.0
+        },
+        "2024-12-31": {
+          "net_income": 88995000000.0,
+          "cash_dividends": 0.0,
+          "share_repurchases": 2918000000.0,
+          "share_issuance": 0.0,
+          "net_shareholder_payout": 2918000000.0,
+          "payout_ratio": 0.03278835889656722
+        },
+        "2023-12-31": {
+          "net_income": 96223000000.0,
+          "cash_dividends": 0.0,
+          "share_repurchases": 9171000000.0,
+          "share_issuance": 0.0,
+          "net_shareholder_payout": 9171000000.0,
+          "payout_ratio": 0.09530985315361193
+        }
+      },
+      "source": {
+        "provider": "yfinance",
+        "price": "fast_info.regularMarketPreviousClose",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": null,
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": null
+        }
+      }
+    }
+  ],
+  "warnings": []
+}
