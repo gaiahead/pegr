@@ -1,6 +1,6 @@
-# PEGR — 미국 주식 가치평가 모니터
+# PEGR — 한국·미국 주식 가치평가 모니터
 
-총순이익 성장과 배당·순자사주매입을 함께 반영해 미국 상장기업의 10년 적정 시가총액을 계산하는 정적 대시보드입니다.
+총순이익 성장과 배당·순자사주매입을 함께 반영해 한국·미국 상장기업의 10년 적정 시가총액을 계산하는 정적 대시보드입니다.
 
 > 이 프로젝트의 PEGR은 독자적인 `Price to Earnings Growth Ratio`이며, 일반적인 PEG(`PER ÷ EPS 성장률`)와 다릅니다.
 
@@ -26,17 +26,19 @@ PEGR = 현재 시가총액 ÷ 적정 시가총액
 
 초기 시장 평가에서는 현재가를 역산하므로 PEGR은 `1.000`, 괴리율은 `0.0%`입니다. 사용자가 시장 평가를 수정하면 적정 시가총액·PEGR·괴리율·적정가가 함께 바뀝니다.
 
-## 초기 종목
+## 대상 종목
 
-- Apple (`AAPL`)
-- Microsoft (`MSFT`)
-- Berkshire Hathaway Class B (`BRK-B`)
+- 한국: PBGR이 추적하는 22개 종목
+- 미국: Apple (`AAPL`), Microsoft (`MSFT`), Berkshire Hathaway Class B (`BRK-B`)
+- 한국과 미국은 요구수익률과 10년 후 PER을 시장별로 따로 설정합니다.
 
 ## 데이터
 
-- 제공자: `yfinance`
-- 가격: `regularMarketPreviousClose` 우선, `previousClose`, `lastPrice` 순서
-- 주식수: `fast_info.shares` 우선
+- 한국 가격·상장주식수: 네이버 금융
+- 한국 재무제표: Yahoo Finance의 한국 거래소 티커(`.KS`, `.KQ`)
+- 미국 가격·주식수·재무제표: `yfinance`
+- 미국 가격: `regularMarketPreviousClose` 우선, `previousClose`, `lastPrice` 순서
+- 한국 종목의 우선주가 설정된 경우 보통주와 우선주 상장주식수를 합산합니다.
 - 총순이익: `Net Income Common Stockholders` 우선
 - 배당·자사주매입·주식발행: 연간 현금흐름표
 - 출력: `pegr_data.json`
@@ -72,6 +74,7 @@ python -m http.server 8767
 - 종료 PER과 이익 CAGR은 가치평가 결과에 큰 영향을 줍니다.
 - 주주환원율은 과거 현금흐름을 정규화한 값이며 미래 지속을 보장하지 않습니다.
 - 차입으로 조달한 자사주매입, 대규모 인수, 주식보상, 일회성 손익을 완전히 제거하지 못합니다.
+- 한국 종목의 재무제표 행과 단위는 Yahoo Finance 제공 범위에 의존합니다.
 - Berkshire Hathaway처럼 투자자산 평가손익이 총순이익에 크게 반영되는 기업은 별도 검토가 필요합니다.
 - 적자기업·리츠·금융회사는 각각 다른 평가방식이 더 적합할 수 있습니다.
 - 투자 판단을 대신하지 않습니다.

@@ -1,5 +1,38 @@
 {
+  "kr": {
+    "market": "KR",
+    "currency": "KRW",
+    "required_return": 0.10,
+    "terminal_pe": 15.0,
+    "horizon_years": 10,
+    "assets": {
+      "005930": { "name": "삼성전자", "yahoo_symbol": "005930.KS", "preferred_ticker": "005935" },
+      "009150": { "name": "삼성전기", "yahoo_symbol": "009150.KS" },
+      "000660": { "name": "SK하이닉스", "yahoo_symbol": "000660.KS" },
+      "042700": { "name": "한미반도체", "yahoo_symbol": "042700.KS" },
+      "058470": { "name": "리노공업", "yahoo_symbol": "058470.KQ" },
+      "000100": { "name": "유한양행", "yahoo_symbol": "000100.KS", "preferred_ticker": "000105" },
+      "035420": { "name": "NAVER", "yahoo_symbol": "035420.KS" },
+      "357780": { "name": "솔브레인", "yahoo_symbol": "357780.KQ" },
+      "064760": { "name": "티씨케이", "yahoo_symbol": "064760.KQ" },
+      "079940": { "name": "가비아", "yahoo_symbol": "079940.KQ" },
+      "093320": { "name": "케이아이엔엑스", "yahoo_symbol": "093320.KQ" },
+      "108320": { "name": "LX세미콘", "yahoo_symbol": "108320.KS" },
+      "005290": { "name": "동진쎄미켐", "yahoo_symbol": "005290.KQ" },
+      "086450": { "name": "동국제약", "yahoo_symbol": "086450.KQ" },
+      "112610": { "name": "씨에스윈드", "yahoo_symbol": "112610.KS" },
+      "030190": { "name": "NICE평가정보", "yahoo_symbol": "030190.KS" },
+      "058610": { "name": "에스피지", "yahoo_symbol": "058610.KQ" },
+      "010120": { "name": "LS ELECTRIC", "yahoo_symbol": "010120.KS" },
+      "298040": { "name": "효성중공업", "yahoo_symbol": "298040.KS" },
+      "267260": { "name": "HD현대일렉트릭", "yahoo_symbol": "267260.KS" },
+      "006260": { "name": "LS", "yahoo_symbol": "006260.KS" },
+      "001440": { "name": "대한전선", "yahoo_symbol": "001440.KS" }
+    }
+  },
   "us": {
+    "market": "US",
+    "currency": "USD",
     "required_return": 0.10,
     "terminal_pe": 15.0,
     "horizon_years": 10,

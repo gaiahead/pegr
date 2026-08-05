@@ -5,6 +5,8 @@ const {
   impliedEarningsCagr,
   normalizeMarketCagrOverrides,
   removeMarketCagrOverride,
+  fmtPrice,
+  fmtCompactMoney,
 } = require('./app.js');
 
 const fixture = {
@@ -45,14 +47,19 @@ assert.ok(Math.abs(repriced.fairPrice - fixture.price) < 1e-7);
 
 const overrides = normalizeMarketCagrOverrides({
   AAPL: '12.5',
+  '005930': '11.2',
   MSFT: -99.9,
   invalid: 'nope',
   impossible: -100,
 });
-assert.deepEqual(overrides, { AAPL: 12.5, MSFT: -99.9 });
+assert.deepEqual(overrides, { AAPL: 12.5, '005930': 11.2, MSFT: -99.9 });
 assert.deepEqual(
   removeMarketCagrOverride({ AAPL: 12.5, MSFT: 11 }, 'AAPL'),
   { MSFT: 11 },
 );
+
+assert.equal(fmtPrice(247000, 'KRW'), '247,000원');
+assert.equal(fmtCompactMoney(1_640_000_000_000_000, 'KRW'), '1640.00조');
+assert.equal(fmtPrice(303.42, 'USD'), '$303.42');
 
 console.log(JSON.stringify({ implied, repriced, payoutPv: withPayout.payoutPv }, null, 2));

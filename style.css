@@ -57,6 +57,14 @@ header {
 .save-btn.unsaved { border-color: #fed7aa; background: #fff7ed; color: var(--orange); }
 
 .section { padding: 20px 10px 0; }
+.section + .section { padding-top: 28px; }
+.market-heading {
+  margin: 0 0 9px 2px;
+  color: #0f172a;
+  font-size: 0.94rem;
+  font-weight: 760;
+  line-height: 1.2;
+}
 .controls {
   display: flex;
   align-items: stretch;

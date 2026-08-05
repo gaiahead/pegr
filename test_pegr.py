@@ -123,6 +123,52 @@ class FinancialNormalizationTest(unittest.TestCase):
         self.assertEqual(normalize_payout_ratio(2.0), 1.0)
         self.assertEqual(normalize_payout_ratio(0.4), 0.4)
 
+    def test_net_stock_issuance_is_used_when_detail_rows_are_missing(self):
+        cols = self.income.columns[:3]
+        cashflow = pd.DataFrame(
+            [
+                [-5.0, -5.0, -5.0],
+                [-30.0, 10.0, 0.0],
+            ],
+            index=["Cash Dividends Paid", "Net Common Stock Issuance"],
+            columns=cols,
+        )
+        profile = extract_financial_profile(pd.DataFrame(self.income.loc[:, cols]), cashflow)
+        first = profile["payout_series"]["2025-12-31"]
+        second = profile["payout_series"]["2024-12-31"]
+        self.assertEqual(first["share_repurchases"], 30.0)
+        self.assertEqual(first["share_issuance"], 0.0)
+        self.assertEqual(second["share_repurchases"], 0.0)
+        self.assertEqual(second["share_issuance"], 10.0)
+
+
+class MarketCoverageTest(unittest.TestCase):
+    KR_TICKERS = [
+        "005930", "009150", "000660", "042700", "058470", "000100",
+        "035420", "357780", "064760", "079940", "093320", "108320",
+        "005290", "086450", "112610", "030190", "058610", "010120",
+        "298040", "267260", "006260", "001440",
+    ]
+
+    def test_config_contains_all_pbgr_tickers_in_order(self):
+        config = json.loads(Path("config.json").read_text(encoding="utf-8"))
+        self.assertEqual(list(config["kr"]["assets"]), self.KR_TICKERS)
+        self.assertEqual(config["kr"]["currency"], "KRW")
+        self.assertEqual(len(config["us"]["assets"]), 3)
+
+    def test_generated_payload_has_22_kr_and_3_us_assets(self):
+        payload = json.loads(Path("pegr_data.json").read_text(encoding="utf-8"))
+        kr = [asset for asset in payload["assets"] if asset["market"] == "KR"]
+        us = [asset for asset in payload["assets"] if asset["market"] == "US"]
+        self.assertEqual([asset["ticker"] for asset in kr], self.KR_TICKERS)
+        self.assertEqual(len(us), 3)
+        self.assertEqual(payload["warnings"], [])
+        for asset in payload["assets"]:
+            self.assertGreater(asset["price"], 0)
+            self.assertGreater(asset["shares"], 0)
+            self.assertGreater(asset["normalized_net_income"], 0)
+            self.assertAlmostEqual(asset["pegr"], 1.0, places=6)
+
 
 class UiContractTest(unittest.TestCase):
     def test_pegr_labels_and_files(self):
@@ -130,10 +176,15 @@ class UiContractTest(unittest.TestCase):
         app = Path("app.js").read_text(encoding="utf-8")
         self.assertIn("PEGR 가치평가 모니터", html)
         self.assertIn("시장 평가 ✎", html)
-        self.assertIn("종료 PER", html)
+        self.assertIn("10년 후 PER", html)
         self.assertIn("주주환원율", html)
+        self.assertIn('id="kr-body"', html)
+        self.assertIn('id="us-body"', html)
+        self.assertIn('id="req-kr"', html)
+        self.assertIn('id="req-us"', html)
         self.assertIn('class="market-cagr-input"', app)
         self.assertIn('class="market-cagr-reset"', app)
+        self.assertIn("fmtCompactMoney", app)
         self.assertNotIn("자본총계", html)
         self.assertNotIn("PBGR", html)
         self.assertLess(html.index("시가총액</th>"), html.index("시장 평가 ✎"))

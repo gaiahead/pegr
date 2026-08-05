@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate PEGR data for US-listed companies.
+"""Generate PEGR data for Korean and US-listed companies.
 
 PEGR is this project's payout-inclusive earnings-growth valuation ratio. It is
 not the conventional PEG ratio.
@@ -8,8 +8,10 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import statistics
 import time
+import urllib.request
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Iterable, Optional
@@ -19,6 +21,8 @@ import pandas as pd
 CONFIG_PATH = Path("config.json")
 OUTPUT_PATH = Path("pegr_data.json")
 KST = timezone(timedelta(hours=9))
+HTTP_TIMEOUT = 15
+NAVER_HEADERS = {"User-Agent": "Mozilla/5.0", "Accept-Language": "ko-KR"}
 
 NET_INCOME_ROWS = (
     "Net Income Common Stockholders",
@@ -29,14 +33,19 @@ DIVIDEND_ROWS = (
     "Cash Dividends Paid",
     "Common Stock Dividend Paid",
     "Common Stock Dividend Payments",
+    "Dividend Paid Cfo",
 )
 REPURCHASE_ROWS = (
     "Repurchase Of Capital Stock",
     "Common Stock Repurchase",
+    "Common Stock Payments",
 )
 ISSUANCE_ROWS = (
     "Issuance Of Capital Stock",
     "Common Stock Issuance",
+)
+NET_ISSUANCE_ROWS = (
+    "Net Common Stock Issuance",
 )
 
 
@@ -252,9 +261,13 @@ def extract_financial_profile(
     dividend_row, dividend_source = select_statement_row(cashflow_statement, DIVIDEND_ROWS)
     repurchase_row, repurchase_source = select_statement_row(cashflow_statement, REPURCHASE_ROWS)
     issuance_row, issuance_source = select_statement_row(cashflow_statement, ISSUANCE_ROWS)
+    net_issuance_row, net_issuance_source = select_statement_row(
+        cashflow_statement, NET_ISSUANCE_ROWS
+    )
     dividends = _series_by_date(dividend_row)
     repurchases = _series_by_date(repurchase_row)
     issuances = _series_by_date(issuance_row)
+    net_issuances = _series_by_date(net_issuance_row)
 
     payout_ratios: list[float] = []
     payout_series: dict[str, dict[str, float]] = {}
@@ -262,6 +275,12 @@ def extract_financial_profile(
         dividend = abs(_number_or_zero(dividends.get(date)))
         repurchase = abs(_number_or_zero(repurchases.get(date)))
         issuance = max(0.0, _number_or_zero(issuances.get(date)))
+        if repurchase == 0 and issuance == 0 and date in net_issuances:
+            net_issuance = _number_or_zero(net_issuances.get(date))
+            if net_issuance < 0:
+                repurchase = abs(net_issuance)
+            elif net_issuance > 0:
+                issuance = net_issuance
         net_payout = max(0.0, dividend + repurchase - issuance)
         ratio = net_payout / income
         payout_ratios.append(ratio)
@@ -270,6 +289,7 @@ def extract_financial_profile(
             "cash_dividends": dividend,
             "share_repurchases": repurchase,
             "share_issuance": issuance,
+            "net_stock_issuance_source_value": _number_or_zero(net_issuances.get(date)),
             "net_shareholder_payout": net_payout,
             "payout_ratio": ratio,
         }
@@ -286,6 +306,7 @@ def extract_financial_profile(
             "cash_dividends": dividend_source,
             "share_repurchases": repurchase_source,
             "share_issuance": issuance_source,
+            "net_share_issuance": net_issuance_source,
         },
     }
 
@@ -293,6 +314,46 @@ def extract_financial_profile(
 def load_config() -> dict[str, Any]:
     with CONFIG_PATH.open(encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def _http_get(
+    url: str,
+    headers: Optional[dict[str, str]] = None,
+    timeout: int = HTTP_TIMEOUT,
+    encoding: str = "utf-8",
+) -> str:
+    request = urllib.request.Request(
+        url, headers=headers or {"User-Agent": "Mozilla/5.0"}
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return response.read().decode(encoding, errors="ignore")
+
+
+def get_naver_price(code: str) -> float:
+    url = f"https://polling.finance.naver.com/api/realtime/domestic/stock/{code}"
+    data = json.loads(_http_get(url, timeout=10))
+    return float(data["datas"][0]["closePrice"].replace(",", ""))
+
+
+def _fetch_listed_shares(code: str) -> Optional[int]:
+    url = f"https://finance.naver.com/item/coinfo.naver?code={code}"
+    html = _http_get(url, headers=NAVER_HEADERS, encoding="euc-kr")
+    start = html.find("상장주식수")
+    if start < 0:
+        return None
+    match = re.search(r"<em[^>]*>([0-9,]+)</em>", html[start:start + 200])
+    return int(match.group(1).replace(",", "")) if match else None
+
+
+def get_naver_shares(code: str, preferred_code: Optional[str] = None) -> dict[str, Optional[int]]:
+    common = _fetch_listed_shares(code)
+    preferred = _fetch_listed_shares(preferred_code) if preferred_code else None
+    total = (common or 0) + (preferred or 0)
+    return {
+        "total": total if total > 0 else None,
+        "common": common,
+        "preferred": preferred,
+    }
 
 
 def load_previous_assets() -> dict[str, dict[str, Any]]:
@@ -345,16 +406,33 @@ def _resolve_market_data(ticker: Any) -> tuple[float, float, str]:
 
 
 def fetch_asset(
-    symbol: str,
+    ticker_code: str,
     asset_config: dict[str, Any],
+    market: str,
+    currency: str,
     required_return: float,
     terminal_pe: float,
     horizon_years: int,
 ) -> dict[str, Any]:
     import yfinance as yf
 
-    ticker = yf.Ticker(symbol)
-    price, shares, price_source = _resolve_market_data(ticker)
+    yahoo_symbol = asset_config.get("yahoo_symbol") or ticker_code
+    ticker = yf.Ticker(yahoo_symbol)
+    if market == "KR":
+        price = get_naver_price(ticker_code)
+        shares_data = get_naver_shares(
+            ticker_code, asset_config.get("preferred_ticker")
+        )
+        shares = shares_data["total"]
+        if not _positive(shares):
+            raise ValueError("Naver listed shares unavailable")
+        assert shares is not None
+        shares = float(shares)
+        price_source = "Naver Finance polling closePrice"
+    else:
+        price, shares, price_source = _resolve_market_data(ticker)
+        shares_data = {"total": round(shares), "common": round(shares), "preferred": None}
+
     profile = extract_financial_profile(ticker.income_stmt, ticker.cash_flow)
     implied_pct = implied_earnings_cagr(
         price,
@@ -381,12 +459,15 @@ def fetch_asset(
         raise ValueError("PEGR calculation unavailable")
 
     return {
-        "ticker": symbol,
-        "name": asset_config.get("name") or symbol,
-        "market": "US",
-        "currency": "USD",
+        "ticker": ticker_code,
+        "yahoo_symbol": yahoo_symbol,
+        "name": asset_config.get("name") or ticker_code,
+        "market": market,
+        "currency": currency,
         "price": round(price, 6),
         "shares": round(shares),
+        "shares_common": shares_data.get("common"),
+        "shares_preferred": shares_data.get("preferred"),
         "market_cap": round(calc["market_cap"], 2),
         "normalized_net_income": round(profile["normalized_net_income"], 2),
         "shareholder_payout_ratio_pct": round(
@@ -403,52 +484,69 @@ def fetch_asset(
         "net_income_series": profile["net_income_series"],
         "payout_series": profile["payout_series"],
         "source": {
-            "provider": "yfinance",
+            "provider": "Naver Finance + yfinance" if market == "KR" else "yfinance",
             "price": price_source,
+            "financials": f"yfinance {yahoo_symbol}",
             "rows": profile["source_rows"],
         },
     }
 
 
 def build_payload(config: dict[str, Any]) -> dict[str, Any]:
-    us_config = config["us"]
-    required_return = float(us_config["required_return"])
-    terminal_pe = float(us_config["terminal_pe"])
-    horizon_years = int(us_config.get("horizon_years", 10))
     previous = load_previous_assets()
     assets: list[dict[str, Any]] = []
     warnings: list[str] = []
+    market_settings: dict[str, dict[str, Any]] = {}
+    expected: list[str] = []
 
-    for symbol, asset_config in us_config["assets"].items():
-        last_error: Optional[Exception] = None
-        for attempt in range(1, 4):
-            try:
-                asset = fetch_asset(
-                    symbol,
-                    asset_config,
-                    required_return,
-                    terminal_pe,
-                    horizon_years,
-                )
-                assets.append(asset)
-                print(f"[OK] {symbol}: implied CAGR {asset['market_implied_cagr_pct']:.2f}%")
-                break
-            except Exception as exc:  # network/data provider boundary
-                last_error = exc
-                if attempt < 3:
-                    time.sleep(attempt)
-        else:
-            warning = f"{symbol}: {last_error}"
-            warnings.append(warning)
-            if symbol in previous:
-                fallback = dict(previous[symbol])
-                fallback["data_note"] = f"이전 검증 데이터 유지 · {warning}"
-                assets.append(fallback)
-                print(f"[WARN] {warning}; previous data preserved")
+    for market_key, market_config in config.items():
+        market = str(market_config.get("market") or market_key).upper()
+        currency = str(market_config.get("currency") or ("KRW" if market == "KR" else "USD"))
+        required_return = float(market_config["required_return"])
+        terminal_pe = float(market_config["terminal_pe"])
+        horizon_years = int(market_config.get("horizon_years", 10))
+        market_settings[market] = {
+            "currency": currency,
+            "required_return": required_return,
+            "terminal_pe": terminal_pe,
+            "horizon_years": horizon_years,
+        }
+
+        for ticker_code, asset_config in market_config["assets"].items():
+            expected.append(ticker_code)
+            last_error: Optional[Exception] = None
+            for attempt in range(1, 4):
+                try:
+                    asset = fetch_asset(
+                        ticker_code,
+                        asset_config,
+                        market,
+                        currency,
+                        required_return,
+                        terminal_pe,
+                        horizon_years,
+                    )
+                    assets.append(asset)
+                    print(
+                        f"[OK] {ticker_code}: implied CAGR "
+                        f"{asset['market_implied_cagr_pct']:.2f}%"
+                    )
+                    break
+                except Exception as exc:  # network/data provider boundary
+                    last_error = exc
+                    if attempt < 3:
+                        time.sleep(attempt)
             else:
-                print(f"[ERROR] {warning}")
+                warning = f"{ticker_code}: {last_error}"
+                warnings.append(warning)
+                if ticker_code in previous:
+                    fallback = dict(previous[ticker_code])
+                    fallback["data_note"] = f"이전 검증 데이터 유지 · {warning}"
+                    assets.append(fallback)
+                    print(f"[WARN] {warning}; previous data preserved")
+                else:
+                    print(f"[ERROR] {warning}")
 
-    expected = list(us_config["assets"])
     actual = [asset["ticker"] for asset in assets]
     missing = [symbol for symbol in expected if symbol not in actual]
     if missing:
@@ -456,11 +554,7 @@ def build_payload(config: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "updated": datetime.now(KST).strftime("%Y-%m-%d %H:%M KST"),
-        "market": "US",
-        "currency": "USD",
-        "required_return": required_return,
-        "terminal_pe": terminal_pe,
-        "horizon_years": horizon_years,
+        "market_settings": market_settings,
         "assets": assets,
         "warnings": warnings,
     }

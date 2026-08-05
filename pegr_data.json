@@ -1,18 +1,1526 @@
 {
-  "updated": "2026-08-05 09:58 KST",
-  "market": "US",
-  "currency": "USD",
-  "required_return": 0.1,
-  "terminal_pe": 15.0,
-  "horizon_years": 10,
+  "updated": "2026-08-05 13:28 KST",
+  "market_settings": {
+    "KR": {
+      "currency": "KRW",
+      "required_return": 0.1,
+      "terminal_pe": 15.0,
+      "horizon_years": 10
+    },
+    "US": {
+      "currency": "USD",
+      "required_return": 0.1,
+      "terminal_pe": 15.0,
+      "horizon_years": 10
+    }
+  },
   "assets": [
     {
+      "ticker": "005930",
+      "yahoo_symbol": "005930.KS",
+      "name": "삼성전자",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 247000.0,
+      "shares": 6648649811,
+      "shares_common": 5846278608,
+      "shares_preferred": 802371203,
+      "market_cap": 1642216503317000.0,
+      "normalized_net_income": 33621363000000.0,
+      "shareholder_payout_ratio_pct": 40.8632,
+      "market_implied_cagr_pct": 21.752707,
+      "fair_market_cap": 1642216503316999.5,
+      "fair_price": 247000.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 240658704664775.06,
+      "payout_pv": 250451273922386.88,
+      "terminal_pv": 1391765229394612.5,
+      "net_income_series": {
+        "2025-12-31": 44260956000000.0,
+        "2024-12-31": 33621363000000.0,
+        "2023-12-31": 14473401000000.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 44260956000000.0,
+          "cash_dividends": 9897183000000.0,
+          "share_repurchases": 8189263000000.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -8189263000000.0,
+          "net_shareholder_payout": 18086446000000.0,
+          "payout_ratio": 0.4086320684081022
+        },
+        "2024-12-31": {
+          "net_income": 33621363000000.0,
+          "cash_dividends": 10888749000000.0,
+          "share_repurchases": 1811775000000.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -1811775000000.0,
+          "net_shareholder_payout": 12700524000000.0,
+          "payout_ratio": 0.3777516098916037
+        },
+        "2023-12-31": {
+          "net_income": 14473401000000.0,
+          "cash_dividends": 9864474000000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 9864474000000.0,
+          "payout_ratio": 0.6815588126108024
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 005930.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": null,
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "009150",
+      "yahoo_symbol": "009150.KS",
+      "name": "삼성전기",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 1336000.0,
+      "shares": 74693696,
+      "shares_common": 74693696,
+      "shares_preferred": null,
+      "market_cap": 99790777856000.0,
+      "normalized_net_income": 679130069620.0,
+      "shareholder_payout_ratio_pct": 19.5035,
+      "market_implied_cagr_pct": 37.417955,
+      "fair_market_cap": 99790777855999.94,
+      "fair_price": 1336000.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 16307514253864.13,
+      "payout_pv": 5481987538193.71,
+      "terminal_pv": 94308790317806.22,
+      "net_income_series": {
+        "2025-12-31": 706113165450.0,
+        "2024-12-31": 679130069620.0,
+        "2023-12-31": 422956706610.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 706113165450.0,
+          "cash_dividends": 137716643090.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 137716643090.0,
+          "payout_ratio": 0.19503480437478365
+        },
+        "2024-12-31": {
+          "net_income": 679130069620.0,
+          "cash_dividends": 88584145450.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 88584145450.0,
+          "payout_ratio": 0.13043767227030062
+        },
+        "2023-12-31": {
+          "net_income": 422956706610.0,
+          "cash_dividends": 160342144790.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 160342144790.0,
+          "payout_ratio": 0.37909824406176945
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 009150.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": null,
+          "net_share_issuance": null
+        }
+      }
+    },
+    {
+      "ticker": "000660",
+      "yahoo_symbol": "000660.KS",
+      "name": "SK하이닉스",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 1675000.0,
+      "shares": 730492365,
+      "shares_common": 730492365,
+      "shares_preferred": null,
+      "market_cap": 1223574711375000.0,
+      "normalized_net_income": 19788681000000.0,
+      "shareholder_payout_ratio_pct": 3.7655,
+      "market_implied_cagr_pct": 26.555529,
+      "fair_market_cap": 1223574711374998.0,
+      "fair_price": 1675000.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 208558594814138.84,
+      "payout_pv": 17449211123339.45,
+      "terminal_pv": 1206125500251658.5,
+      "net_income_series": {
+        "2025-12-31": 42919287000000.0,
+        "2024-12-31": 19788681000000.0,
+        "2022-12-31": 2229560000000.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 42919287000000.0,
+          "cash_dividends": 1681166000000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 65035000000.0,
+          "net_stock_issuance_source_value": 65035000000.0,
+          "net_shareholder_payout": 1616131000000.0,
+          "payout_ratio": 0.03765512227637892
+        },
+        "2024-12-31": {
+          "net_income": 19788681000000.0,
+          "cash_dividends": 826323000000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 93829000000.0,
+          "net_stock_issuance_source_value": 93829000000.0,
+          "net_shareholder_payout": 732494000000.0,
+          "payout_ratio": 0.037015807167744025
+        },
+        "2022-12-31": {
+          "net_income": 2229560000000.0,
+          "cash_dividends": 1680905000000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 11670000000.0,
+          "net_stock_issuance_source_value": 11670000000.0,
+          "net_shareholder_payout": 1669235000000.0,
+          "payout_ratio": 0.748683596763487
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 000660.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "042700",
+      "yahoo_symbol": "042700.KS",
+      "name": "한미반도체",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 208000.0,
+      "shares": 95312200,
+      "shares_common": 95312200,
+      "shares_preferred": null,
+      "market_cap": 19824937600000.0,
+      "normalized_net_income": 214007548410.0,
+      "shareholder_payout_ratio_pct": 35.5513,
+      "market_implied_cagr_pct": 30.435188,
+      "fair_market_cap": 19824937600000.01,
+      "fair_price": 208000.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 3050540439608.43,
+      "payout_pv": 2183206665633.38,
+      "terminal_pv": 17641730934366.62,
+      "net_income_series": {
+        "2025-12-31": 214007548410.0,
+        "2024-12-31": 152614498000.0,
+        "2023-12-31": 267167515850.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 214007548410.0,
+          "cash_dividends": 68294161440.0,
+          "share_repurchases": 7788213000.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -7788213000.0,
+          "net_shareholder_payout": 76082374440.0,
+          "payout_ratio": 0.3555125742305119
+        },
+        "2024-12-31": {
+          "net_income": 152614498000.0,
+          "cash_dividends": 40521474840.0,
+          "share_repurchases": 189887013600.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -189887013600.0,
+          "net_shareholder_payout": 230408488440.0,
+          "payout_ratio": 1.5097418099819062
+        },
+        "2023-12-31": {
+          "net_income": 267167515850.0,
+          "cash_dividends": 19467860400.0,
+          "share_repurchases": 50503615450.0,
+          "share_issuance": 27638206580.0,
+          "net_stock_issuance_source_value": -22865408870.0,
+          "net_shareholder_payout": 42333269270.0,
+          "payout_ratio": 0.15845215738640855
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 042700.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "058470",
+      "yahoo_symbol": "058470.KQ",
+      "name": "리노공업",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 66300.0,
+      "shares": 76211850,
+      "shares_common": 76211850,
+      "shares_preferred": null,
+      "market_cap": 5052845655000.0,
+      "normalized_net_income": 113279046420.0,
+      "shareholder_payout_ratio_pct": 40.1993,
+      "market_implied_cagr_pct": 20.618259,
+      "fair_market_cap": 5052845654999.99,
+      "fair_price": 66300.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 738380379561.88,
+      "payout_pv": 782681649202.3,
+      "terminal_pv": 4270164005797.69,
+      "net_income_series": {
+        "2025-12-31": 151960670400.0,
+        "2024-12-31": 113279046420.0,
+        "2023-12-31": 110923015440.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 151960670400.0,
+          "cash_dividends": 45537360000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 45537360000.0,
+          "payout_ratio": 0.2996654323788769
+        },
+        "2024-12-31": {
+          "net_income": 113279046420.0,
+          "cash_dividends": 45537360000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 45537360000.0,
+          "payout_ratio": 0.401992790715796
+        },
+        "2023-12-31": {
+          "net_income": 110923015440.0,
+          "cash_dividends": 45537360000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 45537360000.0,
+          "payout_ratio": 0.41053121229499817
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 058470.KQ",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": null,
+          "net_share_issuance": null
+        }
+      }
+    },
+    {
+      "ticker": "000100",
+      "yahoo_symbol": "000100.KS",
+      "name": "유한양행",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 75300.0,
+      "shares": 80828541,
+      "shares_common": 79647601,
+      "shares_preferred": 1180940,
+      "market_cap": 6086389137300.0,
+      "normalized_net_income": 136198255220.0,
+      "shareholder_payout_ratio_pct": 25.4966,
+      "market_implied_cagr_pct": 21.375338,
+      "fair_market_cap": 6086389137300.0,
+      "fair_price": 75300.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 945096303603.14,
+      "payout_pv": 620756071517.33,
+      "terminal_pv": 5465633065782.67,
+      "net_income_series": {
+        "2025-12-31": 194079171660.0,
+        "2024-12-31": 70687449390.0,
+        "2023-12-31": 136198255220.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 194079171660.0,
+          "cash_dividends": 37481120900.0,
+          "share_repurchases": 19999943550.0,
+          "share_issuance": 35456020200.0,
+          "net_stock_issuance_source_value": 15456076650.0,
+          "net_shareholder_payout": 22025044250.0,
+          "payout_ratio": 0.11348484261147222
+        },
+        "2024-12-31": {
+          "net_income": 70687449390.0,
+          "cash_dividends": 32145147300.0,
+          "share_repurchases": 2512349430.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -2512349430.0,
+          "net_shareholder_payout": 34657496730.0,
+          "payout_ratio": 0.49029208196190655
+        },
+        "2023-12-31": {
+          "net_income": 136198255220.0,
+          "cash_dividends": 27268933000.0,
+          "share_repurchases": 7457003880.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -7457003880.0,
+          "net_shareholder_payout": 34725936880.0,
+          "payout_ratio": 0.2549660920685618
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 000100.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "035420",
+      "yahoo_symbol": "035420.KS",
+      "name": "NAVER",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 230500.0,
+      "shares": 156944242,
+      "shares_common": 156944242,
+      "shares_preferred": null,
+      "market_cap": 36175647781000.0,
+      "normalized_net_income": 1923237257010.0,
+      "shareholder_payout_ratio_pct": 6.174,
+      "market_implied_cagr_pct": 12.100655,
+      "fair_market_cap": 36175647781000.05,
+      "fair_price": 230500.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 6027182818133.09,
+      "payout_pv": 1319549435557.3,
+      "terminal_pv": 34856098345442.75,
+      "net_income_series": {
+        "2025-12-31": 1953214734950.0,
+        "2024-12-31": 1923237257010.0,
+        "2023-12-31": 1012321527620.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 1953214734950.0,
+          "cash_dividends": 168436666610.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 47845121000.0,
+          "net_stock_issuance_source_value": 47845121000.0,
+          "net_shareholder_payout": 120591545610.0,
+          "payout_ratio": 0.06174003474998718
+        },
+        "2024-12-31": {
+          "net_income": 1923237257010.0,
+          "cash_dividends": 118984856180.0,
+          "share_repurchases": 405122711100.0,
+          "share_issuance": 11738394000.0,
+          "net_stock_issuance_source_value": -393384317100.0,
+          "net_shareholder_payout": 512369173280.0,
+          "payout_ratio": 0.2664097585529126
+        },
+        "2023-12-31": {
+          "net_income": 1012321527620.0,
+          "cash_dividends": 62397685220.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 28003592000.0,
+          "net_stock_issuance_source_value": 28003592000.0,
+          "net_shareholder_payout": 34394093220.0,
+          "payout_ratio": 0.03397546360676692
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 035420.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "357780",
+      "yahoo_symbol": "357780.KQ",
+      "name": "솔브레인",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 284000.0,
+      "shares": 7778566,
+      "shares_common": 7778566,
+      "shares_preferred": null,
+      "market_cap": 2209112744000.0,
+      "normalized_net_income": 118437371610.0,
+      "shareholder_payout_ratio_pct": 16.5052,
+      "market_implied_cagr_pct": 11.312726,
+      "fair_market_cap": 2209112744000.0,
+      "fair_price": 284000.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 345889154984.0,
+      "payout_pv": 208784105142.02,
+      "terminal_pv": 2000328638857.97,
+      "net_income_series": {
+        "2025-12-31": 79057915020.0,
+        "2024-12-31": 118437371610.0,
+        "2023-12-31": 130363029220.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 79057915020.0,
+          "cash_dividends": 17809226600.0,
+          "share_repurchases": 14981200050.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -14981200050.0,
+          "net_shareholder_payout": 32790426650.0,
+          "payout_ratio": 0.4147646271939338
+        },
+        "2024-12-31": {
+          "net_income": 118437371610.0,
+          "cash_dividends": 15486284000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 15486284000.0,
+          "payout_ratio": 0.13075504622809825
+        },
+        "2023-12-31": {
+          "net_income": 130363029220.0,
+          "cash_dividends": 18949048000.0,
+          "share_repurchases": 2567583800.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -2567583800.0,
+          "net_shareholder_payout": 21516631800.0,
+          "payout_ratio": 0.16505164024447944
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 357780.KQ",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": null,
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "064760",
+      "yahoo_symbol": "064760.KQ",
+      "name": "티씨케이",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 185200.0,
+      "shares": 11179416,
+      "shares_common": 11179416,
+      "shares_preferred": null,
+      "market_cap": 2070427843200.0,
+      "normalized_net_income": 69902724550.0,
+      "shareholder_payout_ratio_pct": 32.407,
+      "market_implied_cagr_pct": 15.882302,
+      "fair_market_cap": 2070427843200.0,
+      "fair_price": 185200.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 305256729149.69,
+      "payout_pv": 305082591046.92,
+      "terminal_pv": 1765345252153.09,
+      "net_income_series": {
+        "2025-12-31": 69902724550.0,
+        "2024-12-31": 71994036570.0,
+        "2023-12-31": 61244566660.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 69902724550.0,
+          "cash_dividends": 16461750000.0,
+          "share_repurchases": 49999988600.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -49999988600.0,
+          "net_shareholder_payout": 66461738600.0,
+          "payout_ratio": 0.950774651887299
+        },
+        "2024-12-31": {
+          "net_income": 71994036570.0,
+          "cash_dividends": 14010000000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 14010000000.0,
+          "payout_ratio": 0.19459945111395496
+        },
+        "2023-12-31": {
+          "net_income": 61244566660.0,
+          "cash_dividends": 19847500000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 19847500000.0,
+          "payout_ratio": 0.3240695637571191
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 064760.KQ",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Dividend Paid Cfo",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": null,
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "079940",
+      "yahoo_symbol": "079940.KQ",
+      "name": "가비아",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 46550.0,
+      "shares": 13420684,
+      "shares_common": 13420684,
+      "shares_preferred": null,
+      "market_cap": 624732840200.0,
+      "normalized_net_income": 15793656880.0,
+      "shareholder_payout_ratio_pct": 26.3313,
+      "market_implied_cagr_pct": 19.800787,
+      "fair_market_cap": 624732840200.0,
+      "fair_price": 46550.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 96178812664.01,
+      "payout_pv": 68516403081.39,
+      "terminal_pv": 556216437118.61,
+      "net_income_series": {
+        "2025-12-31": 15793656880.0,
+        "2024-12-31": 14629518270.0,
+        "2023-12-31": 16026421890.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 15793656880.0,
+          "cash_dividends": 2862625400.0,
+          "share_repurchases": 1951610940.0,
+          "share_issuance": 655560000.0,
+          "net_stock_issuance_source_value": -1296050940.0,
+          "net_shareholder_payout": 4158676340.0,
+          "payout_ratio": 0.26331307382435676
+        },
+        "2024-12-31": {
+          "net_income": 14629518270.0,
+          "cash_dividends": 2871966120.0,
+          "share_repurchases": 2906461630.0,
+          "share_issuance": 21497000.0,
+          "net_stock_issuance_source_value": -2884964630.0,
+          "net_shareholder_payout": 5756930750.0,
+          "payout_ratio": 0.39351471755604156
+        },
+        "2023-12-31": {
+          "net_income": 16026421890.0,
+          "cash_dividends": 2746444550.0,
+          "share_repurchases": 1115250990.0,
+          "share_issuance": 688607400.0,
+          "net_stock_issuance_source_value": -426643590.0,
+          "net_shareholder_payout": 3173088140.0,
+          "payout_ratio": 0.19799105263664066
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 079940.KQ",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "093320",
+      "yahoo_symbol": "093320.KQ",
+      "name": "케이아이엔엑스",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 136400.0,
+      "shares": 4880000,
+      "shares_common": 4880000,
+      "shares_preferred": null,
+      "market_cap": 665632000000.0,
+      "normalized_net_income": 18070626000.0,
+      "shareholder_payout_ratio_pct": 16.1882,
+      "market_implied_cagr_pct": 19.455291,
+      "fair_market_cap": 665632000000.0,
+      "fair_price": 136400.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 106912163554.31,
+      "payout_pv": 47342991748.67,
+      "terminal_pv": 618289008251.33,
+      "net_income_series": {
+        "2025-12-31": 17098641320.0,
+        "2024-12-31": 18070626000.0,
+        "2023-12-31": 24689548530.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 17098641320.0,
+          "cash_dividends": 2902102200.0,
+          "share_repurchases": 1951610940.0,
+          "share_issuance": 655560000.0,
+          "net_stock_issuance_source_value": -1296050940.0,
+          "net_shareholder_payout": 4198153140.0,
+          "payout_ratio": 0.24552553980353334
+        },
+        "2024-12-31": {
+          "net_income": 18070626000.0,
+          "cash_dividends": 2902102200.0,
+          "share_repurchases": 23214690.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -23214690.0,
+          "net_shareholder_payout": 2925316890.0,
+          "payout_ratio": 0.1618824322964794
+        },
+        "2023-12-31": {
+          "net_income": 24689548530.0,
+          "cash_dividends": 2902102200.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 2902102200.0,
+          "payout_ratio": 0.11754375323929829
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 093320.KQ",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "108320",
+      "yahoo_symbol": "108320.KS",
+      "name": "LX세미콘",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 35250.0,
+      "shares": 16264300,
+      "shares_common": 16264300,
+      "shares_preferred": null,
+      "market_cap": 573316575000.0,
+      "normalized_net_income": 101203533000.0,
+      "shareholder_payout_ratio_pct": 47.238,
+      "market_implied_cagr_pct": -5.212235,
+      "fair_market_cap": 573316575000.0,
+      "fair_price": 35250.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 59254112940.69,
+      "payout_pv": 230641190769.28,
+      "terminal_pv": 342675384230.72,
+      "net_income_series": {
+        "2025-12-31": 82633081340.0,
+        "2024-12-31": 130509153930.0,
+        "2023-12-31": 101203533000.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 82633081340.0,
+          "cash_dividends": 39034211460.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 39034211460.0,
+          "payout_ratio": 0.47237995760306717
+        },
+        "2024-12-31": {
+          "net_income": 130509153930.0,
+          "cash_dividends": 29275659680.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 29275659680.0,
+          "payout_ratio": 0.22431882207819934
+        },
+        "2023-12-31": {
+          "net_income": 101203533000.0,
+          "cash_dividends": 73189350000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 73189350000.0,
+          "payout_ratio": 0.7231896736253269
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 108320.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": null,
+          "net_share_issuance": null
+        }
+      }
+    },
+    {
+      "ticker": "005290",
+      "yahoo_symbol": "005290.KQ",
+      "name": "동진쎄미켐",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 41800.0,
+      "shares": 50970126,
+      "shares_common": 50970126,
+      "shares_preferred": null,
+      "market_cap": 2130551266800.0,
+      "normalized_net_income": 127314850800.0,
+      "shareholder_payout_ratio_pct": 0.0,
+      "market_implied_cagr_pct": 11.210259,
+      "fair_market_cap": 2130551266800.0,
+      "fair_price": 41800.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 368406752274.6,
+      "payout_pv": 0.0,
+      "terminal_pv": 2130551266800.0,
+      "net_income_series": {
+        "2025-12-31": 99069889890.0,
+        "2024-12-31": 154781909680.0,
+        "2023-12-31": 127314850800.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 99069889890.0,
+          "cash_dividends": 10357140900.0,
+          "share_repurchases": 1103296480.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -1103296480.0,
+          "net_shareholder_payout": 11460437380.0,
+          "payout_ratio": 0.11568032822813103
+        },
+        "2024-12-31": {
+          "net_income": 154781909680.0,
+          "cash_dividends": 6236955460.0,
+          "share_repurchases": 1005030.0,
+          "share_issuance": 8381100000.0,
+          "net_stock_issuance_source_value": 8380094970.0,
+          "net_shareholder_payout": 0.0,
+          "payout_ratio": 0.0
+        },
+        "2023-12-31": {
+          "net_income": 127314850800.0,
+          "cash_dividends": 6751084470.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 19341000000.0,
+          "net_stock_issuance_source_value": 19341000000.0,
+          "net_shareholder_payout": 0.0,
+          "payout_ratio": 0.0
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 005290.KQ",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "086450",
+      "yahoo_symbol": "086450.KQ",
+      "name": "동국제약",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 18310.0,
+      "shares": 45230420,
+      "shares_common": 45230420,
+      "shares_preferred": null,
+      "market_cap": 828168990200.0,
+      "normalized_net_income": 61218952620.0,
+      "shareholder_payout_ratio_pct": 13.5792,
+      "market_implied_cagr_pct": 7.845628,
+      "fair_market_cap": 828168990200.0,
+      "fair_price": 18310.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 130290075952.54,
+      "payout_pv": 74682023258.53,
+      "terminal_pv": 753486966941.47,
+      "net_income_series": {
+        "2025-12-31": 66020354860.0,
+        "2024-12-31": 61218952620.0,
+        "2023-12-31": 47175202520.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 66020354860.0,
+          "cash_dividends": 9243589280.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 18540000000.0,
+          "net_stock_issuance_source_value": 18540000000.0,
+          "net_shareholder_payout": 0.0,
+          "payout_ratio": 0.0
+        },
+        "2024-12-31": {
+          "net_income": 61218952620.0,
+          "cash_dividends": 8313065580.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 8313065580.0,
+          "payout_ratio": 0.1357923522736675
+        },
+        "2023-12-31": {
+          "net_income": 47175202520.0,
+          "cash_dividends": 8050633200.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 8050633200.0,
+          "payout_ratio": 0.1706539192192534
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 086450.KQ",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "112610",
+      "yahoo_symbol": "112610.KS",
+      "name": "씨에스윈드",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 40750.0,
+      "shares": 42171403,
+      "shares_common": 42171403,
+      "shares_preferred": null,
+      "market_cap": 1718484672250.0,
+      "normalized_net_income": 34701475320.0,
+      "shareholder_payout_ratio_pct": 100.0,
+      "market_implied_cagr_pct": 19.216273,
+      "fair_market_cap": 1718484672250.0,
+      "fair_price": 40750.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 201234923499.71,
+      "payout_pv": 554713056937.31,
+      "terminal_pv": 1163771615312.69,
+      "net_income_series": {
+        "2025-12-31": 34701475320.0,
+        "2024-12-31": 142294111280.0,
+        "2023-12-31": 19380892100.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 34701475320.0,
+          "cash_dividends": 41438680000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 41438680000.0,
+          "payout_ratio": 1.1941475000089419
+        },
+        "2024-12-31": {
+          "net_income": 142294111280.0,
+          "cash_dividends": 20714740500.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 20714740500.0,
+          "payout_ratio": 0.14557693437670416
+        },
+        "2023-12-31": {
+          "net_income": 19380892100.0,
+          "cash_dividends": 20714740500.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 20714740500.0,
+          "payout_ratio": 1.0688228587785182
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 112610.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "030190",
+      "yahoo_symbol": "030190.KS",
+      "name": "NICE평가정보",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 14350.0,
+      "shares": 58911527,
+      "shares_common": 58911527,
+      "shares_preferred": null,
+      "market_cap": 845380412450.0,
+      "normalized_net_income": 76108000800.0,
+      "shareholder_payout_ratio_pct": 39.4968,
+      "market_implied_cagr_pct": 3.587237,
+      "fair_market_cap": 845380412450.0,
+      "fair_price": 14350.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 108266178323.13,
+      "payout_pv": 219260934580.04,
+      "terminal_pv": 626119477869.96,
+      "net_income_series": {
+        "2025-12-31": 77165549360.0,
+        "2024-12-31": 76108000800.0,
+        "2023-12-31": 56046652270.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 77165549360.0,
+          "cash_dividends": 26951995240.0,
+          "share_repurchases": 1731865210.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -1731865210.0,
+          "net_shareholder_payout": 28683860450.0,
+          "payout_ratio": 0.3717184765468506
+        },
+        "2024-12-31": {
+          "net_income": 76108000800.0,
+          "cash_dividends": 24247837880.0,
+          "share_repurchases": 5812416660.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -5812416660.0,
+          "net_shareholder_payout": 30060254540.0,
+          "payout_ratio": 0.39496838997247713
+        },
+        "2023-12-31": {
+          "net_income": 56046652270.0,
+          "cash_dividends": 22051759130.0,
+          "share_repurchases": 5613406660.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -5613406660.0,
+          "net_shareholder_payout": 27665165790.0,
+          "payout_ratio": 0.4936096032413391
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 030190.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": null,
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "058610",
+      "yahoo_symbol": "058610.KQ",
+      "name": "에스피지",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 106500.0,
+      "shares": 22177360,
+      "shares_common": 22177360,
+      "shares_preferred": null,
+      "market_cap": 2361888840000.0,
+      "normalized_net_income": 10995238460.0,
+      "shareholder_payout_ratio_pct": 40.3399,
+      "market_implied_cagr_pct": 42.055827,
+      "fair_market_cap": 2361888840000.0,
+      "fair_price": 106500.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 367955394287.32,
+      "payout_pv": 233947843846.89,
+      "terminal_pv": 2127940996153.1,
+      "net_income_series": {
+        "2025-12-31": 9133325300.0,
+        "2024-12-31": 13113747070.0,
+        "2023-12-31": 10995238460.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 9133325300.0,
+          "cash_dividends": 5544340000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 5544340000.0,
+          "payout_ratio": 0.6070450594812384
+        },
+        "2024-12-31": {
+          "net_income": 13113747070.0,
+          "cash_dividends": 4435472000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 4435472000.0,
+          "payout_ratio": 0.33823071135380683
+        },
+        "2023-12-31": {
+          "net_income": 10995238460.0,
+          "cash_dividends": 4435472000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 4435472000.0,
+          "payout_ratio": 0.40339934564729757
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 058610.KQ",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "010120",
+      "yahoo_symbol": "010120.KS",
+      "name": "LS ELECTRIC",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 209500.0,
+      "shares": 150000000,
+      "shares_common": 150000000,
+      "shares_preferred": null,
+      "market_cap": 31425000000000.0,
+      "normalized_net_income": 238715669200.0,
+      "shareholder_payout_ratio_pct": 15.7774,
+      "market_implied_cagr_pct": 36.041359,
+      "fair_market_cap": 31425000000000.0,
+      "fair_price": 209500.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 5183111522028.89,
+      "payout_pv": 1450292014753.14,
+      "terminal_pv": 29974707985246.86,
+      "net_income_series": {
+        "2025-12-31": 286623001980.0,
+        "2024-12-31": 238715669200.0,
+        "2023-12-31": 205961759130.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 286623001980.0,
+          "cash_dividends": 87399833610.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 87399833610.0,
+          "payout_ratio": 0.30492958697047834
+        },
+        "2024-12-31": {
+          "net_income": 238715669200.0,
+          "cash_dividends": 82801912020.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 63391363750.0,
+          "net_stock_issuance_source_value": 63391363750.0,
+          "net_shareholder_payout": 19410548270.0,
+          "payout_ratio": 0.08131241797008941
+        },
+        "2023-12-31": {
+          "net_income": 205961759130.0,
+          "cash_dividends": 32495350600.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 32495350600.0,
+          "payout_ratio": 0.15777370875672808
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 010120.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "298040",
+      "yahoo_symbol": "298040.KS",
+      "name": "효성중공업",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 2961000.0,
+      "shares": 9324548,
+      "shares_common": 9324548,
+      "shares_preferred": null,
+      "market_cap": 27609986628000.0,
+      "normalized_net_income": 222633314540.0,
+      "shareholder_payout_ratio_pct": 0.0,
+      "market_implied_cagr_pct": 35.872374,
+      "fair_market_cap": 27609986627999.98,
+      "fair_price": 2961000.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 4774212975989.12,
+      "payout_pv": 0.0,
+      "terminal_pv": 27609986627999.98,
+      "net_income_series": {
+        "2025-12-31": 519893715250.0,
+        "2024-12-31": 222633314540.0,
+        "2023-12-31": 115982221070.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 519893715250.0,
+          "cash_dividends": 46558705000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 7488951420.0,
+          "net_stock_issuance_source_value": 7488951420.0,
+          "net_shareholder_payout": 39069753580.0,
+          "payout_ratio": 0.07514950158844029
+        },
+        "2024-12-31": {
+          "net_income": 222633314540.0,
+          "cash_dividends": 23279352500.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 89216996260.0,
+          "net_stock_issuance_source_value": 89216996260.0,
+          "net_shareholder_payout": 0.0,
+          "payout_ratio": 0.0
+        },
+        "2023-12-31": {
+          "net_income": 115982221070.0,
+          "cash_dividends": 0.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 0.0,
+          "payout_ratio": 0.0
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 298040.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "267260",
+      "yahoo_symbol": "267260.KS",
+      "name": "HD현대일렉트릭",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 764000.0,
+      "shares": 36047135,
+      "shares_common": 36047135,
+      "shares_preferred": null,
+      "market_cap": 27540011140000.0,
+      "normalized_net_income": 501567028460.0,
+      "shareholder_payout_ratio_pct": 15.0694,
+      "market_implied_cagr_pct": 24.49877,
+      "fair_market_cap": 27540011140000.0,
+      "fair_price": 764000.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 4487243016172.61,
+      "payout_pv": 1589614646126.82,
+      "terminal_pv": 25950396493873.18,
+      "net_income_series": {
+        "2025-12-31": 732605395230.0,
+        "2024-12-31": 501567028460.0,
+        "2023-12-31": 259152699990.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 732605395230.0,
+          "cash_dividends": 221346948200.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 221346948200.0,
+          "payout_ratio": 0.30213666134755746
+        },
+        "2024-12-31": {
+          "net_income": 501567028460.0,
+          "cash_dividends": 75583348400.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 75583348400.0,
+          "payout_ratio": 0.15069441193546831
+        },
+        "2023-12-31": {
+          "net_income": 259152699990.0,
+          "cash_dividends": 17995741160.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 17995741160.0,
+          "payout_ratio": 0.06944068559075173
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 267260.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": null,
+          "share_issuance": null,
+          "net_share_issuance": null
+        }
+      }
+    },
+    {
+      "ticker": "006260",
+      "yahoo_symbol": "006260.KS",
+      "name": "LS",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 327500.0,
+      "shares": 31200000,
+      "shares_common": 31200000,
+      "shares_preferred": null,
+      "market_cap": 10218000000000.0,
+      "normalized_net_income": 270815000000.0,
+      "shareholder_payout_ratio_pct": 36.7642,
+      "market_implied_cagr_pct": 18.665259,
+      "fair_market_cap": 10218000000000.0,
+      "fair_price": 327500.0,
+      "pegr": 1.0,
+      "gap": 0.0,
+      "earnings_10": 1499369316035.25,
+      "payout_pv": 1546923327390.94,
+      "terminal_pv": 8671076672609.06,
+      "net_income_series": {
+        "2025-12-31": 270815000000.0,
+        "2024-12-31": 237334000000.0,
+        "2023-12-31": 435964000000.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 270815000000.0,
+          "cash_dividends": 99563000000.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
+          "net_shareholder_payout": 99563000000.0,
+          "payout_ratio": 0.3676421173125565
+        },
+        "2024-12-31": {
+          "net_income": 237334000000.0,
+          "cash_dividends": 104014000000.0,
+          "share_repurchases": 6990000000.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -6990000000.0,
+          "net_shareholder_payout": 111004000000.0,
+          "payout_ratio": 0.46771216934783894
+        },
+        "2023-12-31": {
+          "net_income": 435964000000.0,
+          "cash_dividends": 64180000000.0,
+          "share_repurchases": 2105000000.0,
+          "share_issuance": 79616000000.0,
+          "net_stock_issuance_source_value": 77511000000.0,
+          "net_shareholder_payout": 0.0,
+          "payout_ratio": 0.0
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 006260.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": "Cash Dividends Paid",
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
+      "ticker": "001440",
+      "yahoo_symbol": "001440.KS",
+      "name": "대한전선",
+      "market": "KR",
+      "currency": "KRW",
+      "price": 27900.0,
+      "shares": 195992596,
+      "shares_common": 195992596,
+      "shares_preferred": null,
+      "market_cap": 5468193428400.0,
+      "normalized_net_income": 70616029000.0,
+      "shareholder_payout_ratio_pct": 0.0274,
+      "market_implied_cagr_pct": 29.620411,
+      "fair_market_cap": 5468193428399.99,
+      "fair_price": 27900.0,
+      "pegr": 1.0,
+      "gap": -0.0,
+      "earnings_10": 945447078843.99,
+      "payout_pv": 531777014.2,
+      "terminal_pv": 5467661651385.79,
+      "net_income_series": {
+        "2025-12-31": 84220667290.0,
+        "2024-12-31": 70445443740.0,
+        "2023-12-31": 70616029000.0
+      },
+      "payout_series": {
+        "2025-12-31": {
+          "net_income": 84220667290.0,
+          "cash_dividends": 0.0,
+          "share_repurchases": 23067000.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -23067000.0,
+          "net_shareholder_payout": 23067000.0,
+          "payout_ratio": 0.0002738876423357296
+        },
+        "2024-12-31": {
+          "net_income": 70445443740.0,
+          "cash_dividends": 0.0,
+          "share_repurchases": 0.0,
+          "share_issuance": 459311264000.0,
+          "net_stock_issuance_source_value": 459311264000.0,
+          "net_shareholder_payout": 0.0,
+          "payout_ratio": 0.0
+        },
+        "2023-12-31": {
+          "net_income": 70616029000.0,
+          "cash_dividends": 0.0,
+          "share_repurchases": 1553026000.0,
+          "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -1553026000.0,
+          "net_shareholder_payout": 1553026000.0,
+          "payout_ratio": 0.02199254223145286
+        }
+      },
+      "source": {
+        "provider": "Naver Finance + yfinance",
+        "price": "Naver Finance polling closePrice",
+        "financials": "yfinance 001440.KS",
+        "rows": {
+          "net_income": "Net Income Common Stockholders",
+          "cash_dividends": null,
+          "share_repurchases": "Repurchase Of Capital Stock",
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
+        }
+      }
+    },
+    {
       "ticker": "AAPL",
+      "yahoo_symbol": "AAPL",
       "name": "Apple",
       "market": "US",
       "currency": "USD",
       "price": 303.420013,
       "shares": 14594180000,
+      "shares_common": 14594180000,
+      "shares_preferred": null,
       "market_cap": 4428166291566.77,
       "normalized_net_income": 96995000000.0,
       "shareholder_payout_ratio_pct": 95.4431,
@@ -35,6 +1543,7 @@
           "cash_dividends": 15421000000.0,
           "share_repurchases": 90711000000.0,
           "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -90711000000.0,
           "net_shareholder_payout": 106132000000.0,
           "payout_ratio": 0.9475225426301223
         },
@@ -43,6 +1552,7 @@
           "cash_dividends": 15234000000.0,
           "share_repurchases": 94949000000.0,
           "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -94949000000.0,
           "net_shareholder_payout": 110183000000.0,
           "payout_ratio": 1.1754608688230777
         },
@@ -51,6 +1561,7 @@
           "cash_dividends": 15025000000.0,
           "share_repurchases": 77550000000.0,
           "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -77550000000.0,
           "net_shareholder_payout": 92575000000.0,
           "payout_ratio": 0.9544306407546781
         }
@@ -58,21 +1569,26 @@
       "source": {
         "provider": "yfinance",
         "price": "fast_info.regularMarketPreviousClose",
+        "financials": "yfinance AAPL",
         "rows": {
           "net_income": "Net Income Common Stockholders",
           "cash_dividends": "Cash Dividends Paid",
           "share_repurchases": "Repurchase Of Capital Stock",
-          "share_issuance": "Issuance Of Capital Stock"
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
         }
       }
     },
     {
       "ticker": "MSFT",
+      "yahoo_symbol": "MSFT",
       "name": "Microsoft",
       "market": "US",
       "currency": "USD",
       "price": 487.649994,
       "shares": 7425545491,
+      "shares_common": 7425545491,
+      "shares_preferred": null,
       "market_cap": 3621067213364.22,
       "normalized_net_income": 101832000000.0,
       "shareholder_payout_ratio_pct": 39.7184,
@@ -95,6 +1611,7 @@
           "cash_dividends": 26445000000.0,
           "share_repurchases": 22271000000.0,
           "share_issuance": 2009000000.0,
+          "net_stock_issuance_source_value": -20262000000.0,
           "net_shareholder_payout": 46707000000.0,
           "payout_ratio": 0.34921382589776373
         },
@@ -103,6 +1620,7 @@
           "cash_dividends": 24082000000.0,
           "share_repurchases": 18420000000.0,
           "share_issuance": 2056000000.0,
+          "net_stock_issuance_source_value": -16364000000.0,
           "net_shareholder_payout": 40446000000.0,
           "payout_ratio": 0.39718359651190194
         },
@@ -111,6 +1629,7 @@
           "cash_dividends": 21771000000.0,
           "share_repurchases": 17254000000.0,
           "share_issuance": 2002000000.0,
+          "net_stock_issuance_source_value": -15252000000.0,
           "net_shareholder_payout": 37023000000.0,
           "payout_ratio": 0.4200667150766996
         }
@@ -118,21 +1637,26 @@
       "source": {
         "provider": "yfinance",
         "price": "fast_info.regularMarketPreviousClose",
+        "financials": "yfinance MSFT",
         "rows": {
           "net_income": "Net Income Common Stockholders",
           "cash_dividends": "Cash Dividends Paid",
           "share_repurchases": "Repurchase Of Capital Stock",
-          "share_issuance": "Issuance Of Capital Stock"
+          "share_issuance": "Issuance Of Capital Stock",
+          "net_share_issuance": "Net Common Stock Issuance"
         }
       }
     },
     {
       "ticker": "BRK-B",
+      "yahoo_symbol": "BRK-B",
       "name": "Berkshire Hathaway B",
       "market": "US",
       "currency": "USD",
       "price": 513.140015,
       "shares": 2156853797,
+      "shares_common": 2156853797,
+      "shares_preferred": null,
       "market_cap": 1106767988987.12,
       "normalized_net_income": 88995000000.0,
       "shareholder_payout_ratio_pct": 3.2788,
@@ -155,6 +1679,7 @@
           "cash_dividends": 0.0,
           "share_repurchases": 0.0,
           "share_issuance": 0.0,
+          "net_stock_issuance_source_value": 0.0,
           "net_shareholder_payout": 0.0,
           "payout_ratio": 0.0
         },
@@ -163,6 +1688,7 @@
           "cash_dividends": 0.0,
           "share_repurchases": 2918000000.0,
           "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -2918000000.0,
           "net_shareholder_payout": 2918000000.0,
           "payout_ratio": 0.03278835889656722
         },
@@ -171,6 +1697,7 @@
           "cash_dividends": 0.0,
           "share_repurchases": 9171000000.0,
           "share_issuance": 0.0,
+          "net_stock_issuance_source_value": -9171000000.0,
           "net_shareholder_payout": 9171000000.0,
           "payout_ratio": 0.09530985315361193
         }
@@ -178,11 +1705,13 @@
       "source": {
         "provider": "yfinance",
         "price": "fast_info.regularMarketPreviousClose",
+        "financials": "yfinance BRK-B",
         "rows": {
           "net_income": "Net Income Common Stockholders",
           "cash_dividends": null,
           "share_repurchases": "Repurchase Of Capital Stock",
-          "share_issuance": null
+          "share_issuance": null,
+          "net_share_issuance": "Net Common Stock Issuance"
         }
       }
     }
