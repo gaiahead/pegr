@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="총순이익 성장과 주주환원을 반영한 미국 주식 PEGR 가치평가 모니터">
+  <title>PEGR 가치평가 모니터</title>
+  <link rel="stylesheet" href="style.css?v=pegr-v01-20260805">
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1>PEGR 가치평가 모니터</h1>
+      <p>Price to Earnings Growth Ratio · <span id="updated"></span> 기준</p>
+    </div>
+    <div class="header-right">
+      <span class="status-msg" id="status-msg"></span>
+      <button class="save-btn saved" id="save-btn" type="button" onclick="saveSettings()">✓ 저장됨</button>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="controls" aria-label="공통 가치평가 설정">
+      <span class="control-label">요구수익률</span>
+      <span class="control-input-box">
+        <input class="common-input" id="req-us" type="number" step="0.1" value="10" aria-label="요구수익률">
+        <span class="unit">%</span>
+      </span>
+      <span class="control-label terminal-label">종료 PER</span>
+      <span class="control-input-box">
+        <input class="common-input" id="terminal-pe" type="number" step="0.5" min="0.1" value="15" aria-label="종료 PER">
+        <span class="unit">배</span>
+      </span>
+      <span class="discount-box">
+        <span class="discount-label">10년 할인계수</span>
+        <span class="discount-hint" id="discount-hint">1 / 1.10^10 = 0.386배</span>
+      </span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <colgroup>
+          <col class="col-name">
+          <col class="col-marketcap">
+          <col class="col-market-eval">
+          <col class="col-fair-marketcap">
+          <col class="col-pegr">
+          <col class="col-gap">
+          <col class="col-price">
+          <col class="col-fair-price">
+          <col class="col-earnings">
+          <col class="col-earnings">
+          <col class="col-payout">
+          <col class="col-shares">
+        </colgroup>
+        <thead>
+          <tr class="group-row">
+            <th rowspan="2">종목</th>
+            <th rowspan="2">시가총액</th>
+            <th rowspan="2" title="PEGR·적정가·괴리율에 적용하는 편집 가능한 10년 총순이익 CAGR">시장 평가 ✎</th>
+            <th rowspan="2">적정 시가총액</th>
+            <th rowspan="2">PEGR</th>
+            <th rowspan="2">괴리율</th>
+            <th rowspan="2">종가</th>
+            <th rowspan="2">적정가</th>
+            <th class="group-head" colspan="2">총순이익</th>
+            <th rowspan="2">주주환원율</th>
+            <th rowspan="2">주식수</th>
+          </tr>
+          <tr class="sub-row">
+            <th>기준</th>
+            <th>+10년</th>
+          </tr>
+        </thead>
+        <tbody id="us-body"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="note">
+    PEGR · 적정가 · 괴리율 = 총순이익 성장과 배당·순자사주매입을 포함한 주주환원 기준 &nbsp;|&nbsp;
+    시장 평가 초기값 = 현재 종가가 내포한 10년 총순이익 CAGR &nbsp;|&nbsp;
+    요구수익률·종료 PER·종목별 시장 평가 수정 후 <strong>저장</strong>
+  </div>
+
+  <script src="app.js?v=pegr-v01-20260805"></script>
+</body>
+</html>
