@@ -9,50 +9,35 @@ function isFiniteNumber(value) {
 }
 
 function fairMarketCap(
-  normalizedIncome,
+  latestNetIncome,
   earningsCagrPct,
-  payoutRatioPct,
   requiredReturnPct,
   terminalPe,
   horizonYears = 10,
 ) {
   const values = [
-    normalizedIncome,
+    latestNetIncome,
     earningsCagrPct,
-    payoutRatioPct,
     requiredReturnPct,
     terminalPe,
     horizonYears,
   ];
   if (!values.every(isFiniteNumber)) return null;
-  const income = Number(normalizedIncome);
+  const income = Number(latestNetIncome);
   const growthPct = Number(earningsCagrPct);
-  const payoutPct = Number(payoutRatioPct);
   const requiredPct = Number(requiredReturnPct);
   const pe = Number(terminalPe);
   const years = Number(horizonYears);
   if (
-    income <= 0 || growthPct <= -100 || payoutPct < 0 || payoutPct > 100
-    || requiredPct <= -100 || pe <= 0 || years <= 0 || !Number.isInteger(years)
+    income <= 0 || growthPct <= -100 || requiredPct <= -100
+    || pe <= 0 || years <= 0 || !Number.isInteger(years)
   ) return null;
 
-  const growth = growthPct / 100;
-  const payoutRatio = payoutPct / 100;
-  const requiredReturn = requiredPct / 100;
-  let payoutPv = 0;
-  let earningsT = income;
-  for (let year = 1; year <= years; year += 1) {
-    earningsT = income * Math.pow(1 + growth, year);
-    payoutPv += earningsT * payoutRatio / Math.pow(1 + requiredReturn, year);
-  }
-  const terminalPv = earningsT * pe / Math.pow(1 + requiredReturn, years);
-  const fairValue = payoutPv + terminalPv;
-  if (![payoutPv, terminalPv, fairValue, earningsT].every(Number.isFinite) || fairValue <= 0) {
-    return null;
-  }
+  const earningsT = income * Math.pow(1 + growthPct / 100, years);
+  const terminalPv = earningsT * pe / Math.pow(1 + requiredPct / 100, years);
+  if (![terminalPv, earningsT].every(Number.isFinite) || terminalPv <= 0) return null;
   return {
-    fairMarketCap: fairValue,
-    payoutPv,
+    fairMarketCap: terminalPv,
     terminalPv,
     earnings10: earningsT,
   };
@@ -61,20 +46,18 @@ function fairMarketCap(
 function calculatePegr(
   price,
   shares,
-  normalizedIncome,
-  payoutRatioPct,
+  latestNetIncome,
   earningsCagrPct,
   requiredReturnPct,
   terminalPe,
   horizonYears = 10,
 ) {
-  if (![price, shares, normalizedIncome].every(v => isFiniteNumber(v) && Number(v) > 0)) {
+  if (![price, shares, latestNetIncome].every(v => isFiniteNumber(v) && Number(v) > 0)) {
     return null;
   }
   const valuation = fairMarketCap(
-    normalizedIncome,
+    latestNetIncome,
     earningsCagrPct,
-    payoutRatioPct,
     requiredReturnPct,
     terminalPe,
     horizonYears,
@@ -94,41 +77,27 @@ function calculatePegr(
 function impliedEarningsCagr(
   price,
   shares,
-  normalizedIncome,
-  payoutRatioPct,
+  latestNetIncome,
   requiredReturnPct,
   terminalPe,
   horizonYears = 10,
 ) {
-  if (![price, shares, normalizedIncome].every(v => isFiniteNumber(v) && Number(v) > 0)) {
-    return null;
-  }
-  const target = Number(price) * Number(shares);
-  const valueAt = growthPct => fairMarketCap(
-    normalizedIncome,
-    growthPct,
-    payoutRatioPct,
-    requiredReturnPct,
-    terminalPe,
-    horizonYears,
-  )?.fairMarketCap;
+  const values = [price, shares, latestNetIncome, requiredReturnPct, terminalPe, horizonYears];
+  if (!values.every(isFiniteNumber)) return null;
+  const years = Number(horizonYears);
+  if (
+    Number(price) <= 0 || Number(shares) <= 0 || Number(latestNetIncome) <= 0
+    || Number(requiredReturnPct) <= -100 || Number(terminalPe) <= 0
+    || years <= 0 || !Number.isInteger(years)
+  ) return null;
 
-  let low = -99.999999;
-  let high = 25;
-  let highValue = valueAt(high);
-  while (Number.isFinite(highValue) && highValue < target && high < 10000) {
-    high = high * 2 + 25;
-    highValue = valueAt(high);
-  }
-  if (!Number.isFinite(highValue) || highValue < target) return null;
-  for (let i = 0; i < 200; i += 1) {
-    const mid = (low + high) / 2;
-    const value = valueAt(mid);
-    if (!Number.isFinite(value)) return null;
-    if (value < target) low = mid;
-    else high = mid;
-  }
-  const result = (low + high) / 2;
+  const target = Number(price) * Number(shares);
+  const growthFactor = Math.pow(
+    target * Math.pow(1 + Number(requiredReturnPct) / 100, years)
+      / (Number(latestNetIncome) * Number(terminalPe)),
+    1 / years,
+  );
+  const result = (growthFactor - 1) * 100;
   return Number.isFinite(result) ? result : null;
 }
 
@@ -259,17 +228,19 @@ function fmtPrice(value, currency) {
 }
 
 function fmtCompactMoney(value, currency) {
-  if (!Number.isFinite(Number(value)) || Number(value) <= 0) return '—';
+  if (!Number.isFinite(Number(value))) return '—';
   const n = Number(value);
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-' : '';
   if (currency === 'KRW') {
-    if (Math.abs(n) >= 1e12) return `${(n / 1e12).toFixed(2)}조`;
-    if (Math.abs(n) >= 1e8) return `${(n / 1e8).toFixed(1)}억`;
-    if (Math.abs(n) >= 1e4) return `${(n / 1e4).toFixed(1)}만`;
+    if (abs >= 1e12) return `${sign}${(abs / 1e12).toFixed(2)}조`;
+    if (abs >= 1e8) return `${sign}${(abs / 1e8).toFixed(1)}억`;
+    if (abs >= 1e4) return `${sign}${(abs / 1e4).toFixed(1)}만`;
     return `${Math.round(n).toLocaleString('ko-KR')}원`;
   }
-  if (Math.abs(n) >= 1e12) return `$${(n / 1e12).toFixed(2)}T`;
-  if (Math.abs(n) >= 1e9) return `$${(n / 1e9).toFixed(1)}B`;
-  if (Math.abs(n) >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
+  if (abs >= 1e12) return `${sign}$${(abs / 1e12).toFixed(2)}T`;
+  if (abs >= 1e9) return `${sign}$${(abs / 1e9).toFixed(1)}B`;
+  if (abs >= 1e6) return `${sign}$${(abs / 1e6).toFixed(1)}M`;
   return fmtPrice(n, currency);
 }
 
@@ -301,8 +272,7 @@ function impliedForAsset(asset, common) {
   return impliedEarningsCagr(
     asset.price,
     asset.shares,
-    asset.normalized_net_income,
-    asset.shareholder_payout_ratio_pct,
+    asset.latest_net_income,
     common.requiredReturnPct,
     common.terminalPe,
     common.horizonYears,
@@ -310,6 +280,7 @@ function impliedForAsset(asset, common) {
 }
 
 function resolveMarketCagr(asset, common, overrides = marketCagrOverrides) {
+  if (!(Number(asset.latest_net_income) > 0)) return null;
   const saved = Object.prototype.hasOwnProperty.call(overrides, asset.ticker)
     ? overrides[asset.ticker] : null;
   return isValidCagrPct(saved) ? Number(saved) : impliedForAsset(asset, common);
@@ -319,8 +290,7 @@ function calculateAsset(asset, growthPct, common) {
   return calculatePegr(
     asset.price,
     asset.shares,
-    asset.normalized_net_income,
-    asset.shareholder_payout_ratio_pct,
+    asset.latest_net_income,
     growthPct,
     common.requiredReturnPct,
     common.terminalPe,
@@ -344,25 +314,32 @@ function renderMarket(market) {
   body.innerHTML = '';
 
   rawData.assets.filter(asset => asset.market === market).forEach(asset => {
-    const hasOverride = Object.prototype.hasOwnProperty.call(marketCagrOverrides, asset.ticker);
+    const canValue = Number(asset.latest_net_income) > 0;
+    const hasOverride = canValue
+      && Object.prototype.hasOwnProperty.call(marketCagrOverrides, asset.ticker);
     const growthPct = resolveMarketCagr(asset, common);
     const calc = calculateAsset(asset, growthPct, common);
+    const incomeYear = String(asset.latest_net_income_date || '').slice(0, 4);
+    const incomeTitle = asset.latest_net_income_date
+      ? `${asset.latest_net_income_date} 실제 연간 지배주주순이익`
+      : '최신 실제 연간 지배주주순이익';
     const row = document.createElement('tr');
     row.dataset.ticker = asset.ticker;
     row.innerHTML = `
       <td><div class="name">${asset.name}</div><div class="ticker">${asset.ticker}</div></td>
-      <td class="metric-cell marketcap-cell">${fmtCompactMoney(asset.price * asset.shares, asset.currency)}</td>
+      <td class="metric-cell marketcap-cell">${fmtCompactMoney(asset.market_cap, asset.currency)}</td>
       <td class="metric-cell market-eval-cell">
         <span class="market-cagr-editor">
           <input class="market-cagr-input" type="number" step="0.01"
             value="${isValidCagrPct(growthPct) ? Number(growthPct).toFixed(2) : ''}"
             aria-label="${asset.name} 시장 내재 순이익 CAGR"
-            title="PEGR·적정가·괴리율에 적용하는 10년 총순이익 CAGR">
+            title="최신 실제 연간 순이익에 적용하는 10년 총순이익 CAGR"
+            ${canValue ? '' : 'disabled'}>
           <span class="unit">%</span>
           <button class="market-cagr-reset" type="button"
             aria-label="${asset.name} 시장 평가 초기화"
             title="${asset.name} 시장 평가 초기화"
-            ${hasOverride ? '' : 'disabled'}>↺</button>
+            ${hasOverride && canValue ? '' : 'disabled'}>↺</button>
         </span>
       </td>
       <td class="metric-cell fair-marketcap-cell" data-field="fair-market-cap">${calc ? fmtCompactMoney(calc.fairMarketCap, asset.currency) : '—'}</td>
@@ -370,9 +347,11 @@ function renderMarket(market) {
       <td data-field="gap">${gapHtml(calc?.pegr)}</td>
       <td>${fmtPrice(asset.price, asset.currency)}</td>
       <td data-field="fair-price">${calc ? fmtPrice(calc.fairPrice, asset.currency) : '—'}</td>
-      <td class="metric-cell earnings-cell">${fmtCompactMoney(asset.normalized_net_income, asset.currency)}</td>
+      <td class="metric-cell earnings-cell" title="${incomeTitle}">
+        <div>${fmtCompactMoney(asset.latest_net_income, asset.currency)}</div>
+        <div class="earnings-period">${incomeYear || '—'}</div>
+      </td>
       <td class="metric-cell earnings-cell" data-field="earnings-10">${calc ? fmtCompactMoney(calc.earnings10, asset.currency) : '—'}</td>
-      <td class="metric-cell payout-cell">${Number(asset.shareholder_payout_ratio_pct).toFixed(1)}%</td>
       <td class="metric-cell shares-cell">${fmtShares(asset.shares)}</td>
     `;
 
@@ -420,7 +399,7 @@ function renderAllMarkets() {
 
 async function init() {
   try {
-    rawData = await fetch('pegr_data.json?v=pegr-v02-20260805').then(response => {
+    rawData = await fetch('pegr_data.json?v=pegr-v03-20260805').then(response => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.json();
     });

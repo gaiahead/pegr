@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Generate PEGR data for Korean and US-listed companies.
 
-PEGR is this project's payout-inclusive earnings-growth valuation ratio. It is
-not the conventional PEG ratio.
+PEGR is this project's latest-earnings growth valuation ratio. It is not the
+conventional PEG ratio.
 """
 from __future__ import annotations
 
 import json
 import math
 import re
-import statistics
 import time
 import urllib.request
 from datetime import datetime, timezone, timedelta
@@ -27,25 +26,7 @@ NAVER_HEADERS = {"User-Agent": "Mozilla/5.0", "Accept-Language": "ko-KR"}
 NET_INCOME_ROWS = (
     "Net Income Common Stockholders",
     "Net Income",
-    "Normalized Income",
-)
-DIVIDEND_ROWS = (
-    "Cash Dividends Paid",
-    "Common Stock Dividend Paid",
-    "Common Stock Dividend Payments",
-    "Dividend Paid Cfo",
-)
-REPURCHASE_ROWS = (
-    "Repurchase Of Capital Stock",
-    "Common Stock Repurchase",
-    "Common Stock Payments",
-)
-ISSUANCE_ROWS = (
-    "Issuance Of Capital Stock",
-    "Common Stock Issuance",
-)
-NET_ISSUANCE_ROWS = (
-    "Net Common Stock Issuance",
+    "Net Income Including Noncontrolling Interests",
 )
 
 
@@ -60,42 +41,28 @@ def _positive(value: Any) -> bool:
     return _finite(value) and float(value) > 0
 
 
-def _number_or_zero(value: Any) -> float:
-    return float(value) if _finite(value) else 0.0
-
-
-def normalize_payout_ratio(value: float) -> float:
-    """Clamp a payout ratio to a sustainable 0..100% range."""
-    if not _finite(value):
-        return 0.0
-    return min(1.0, max(0.0, float(value)))
-
 
 def fair_market_cap(
-    normalized_net_income: float,
+    latest_net_income: float,
     earnings_cagr_pct: float,
-    shareholder_payout_ratio: float,
     required_return: float,
     terminal_pe: float,
     horizon_years: int = 10,
 ) -> dict[str, float]:
-    """Return payout-inclusive fair market capitalization components."""
+    """Return the discounted year-end market cap from latest annual earnings."""
     values = (
-        normalized_net_income,
+        latest_net_income,
         earnings_cagr_pct,
-        shareholder_payout_ratio,
         required_return,
         terminal_pe,
         horizon_years,
     )
     if not all(_finite(value) for value in values):
         raise ValueError("all valuation inputs must be finite")
-    if normalized_net_income <= 0:
-        raise ValueError("normalized net income must be positive")
+    if latest_net_income <= 0:
+        raise ValueError("latest net income must be positive")
     if earnings_cagr_pct <= -100:
         raise ValueError("earnings CAGR must be greater than -100%")
-    if not 0 <= shareholder_payout_ratio <= 1:
-        raise ValueError("shareholder payout ratio must be between 0 and 1")
     if required_return <= -1:
         raise ValueError("required return must be greater than -100%")
     if terminal_pe <= 0:
@@ -104,20 +71,13 @@ def fair_market_cap(
         raise ValueError("horizon years must be a positive integer")
 
     growth = earnings_cagr_pct / 100
-    payout_pv = 0.0
-    earnings_t = normalized_net_income
-    for year in range(1, int(horizon_years) + 1):
-        earnings_t = normalized_net_income * (1 + growth) ** year
-        payout_pv += earnings_t * shareholder_payout_ratio / (1 + required_return) ** year
-
+    earnings_t = latest_net_income * (1 + growth) ** int(horizon_years)
     terminal_value = earnings_t * terminal_pe
     terminal_pv = terminal_value / (1 + required_return) ** int(horizon_years)
-    fair_value = payout_pv + terminal_pv
-    if not all(_finite(v) and v >= 0 for v in (payout_pv, terminal_pv, fair_value, earnings_t)):
+    if not all(_finite(v) and v >= 0 for v in (terminal_pv, earnings_t)):
         raise ValueError("valuation result is invalid")
     return {
-        "fair_market_cap": fair_value,
-        "payout_pv": payout_pv,
+        "fair_market_cap": terminal_pv,
         "terminal_pv": terminal_pv,
         "earnings_10": earnings_t,
     }
@@ -126,21 +86,19 @@ def fair_market_cap(
 def calculate_pegr(
     price: float,
     shares: float,
-    normalized_net_income: float,
-    shareholder_payout_ratio: float,
+    latest_net_income: float,
     earnings_cagr_pct: float,
     required_return: float,
     terminal_pe: float,
     horizon_years: int = 10,
 ) -> Optional[dict[str, float]]:
     """Calculate fair value, PEGR and gap for a current equity price."""
-    if not (_positive(price) and _positive(shares) and _positive(normalized_net_income)):
+    if not (_positive(price) and _positive(shares) and _positive(latest_net_income)):
         return None
     try:
         valuation = fair_market_cap(
-            normalized_net_income,
+            latest_net_income,
             earnings_cagr_pct,
-            shareholder_payout_ratio,
             required_return,
             terminal_pe,
             horizon_years,
@@ -165,50 +123,30 @@ def calculate_pegr(
 def implied_earnings_cagr(
     price: float,
     shares: float,
-    normalized_net_income: float,
-    shareholder_payout_ratio: float,
+    latest_net_income: float,
     required_return: float,
     terminal_pe: float,
     horizon_years: int = 10,
 ) -> Optional[float]:
-    """Numerically solve the earnings CAGR that reprices to current market cap."""
-    if not (_positive(price) and _positive(shares) and _positive(normalized_net_income)):
-        return None
-    if not (0 <= shareholder_payout_ratio <= 1):
+    """Solve the earnings CAGR that reprices to current market cap."""
+    if not (_positive(price) and _positive(shares) and _positive(latest_net_income)):
         return None
     if not _finite(required_return) or required_return <= -1:
         return None
     if not _positive(terminal_pe):
         return None
+    if int(horizon_years) != horizon_years or horizon_years <= 0:
+        return None
 
     target = float(price) * float(shares)
-
-    def value_at(growth_pct: float) -> float:
-        return fair_market_cap(
-            float(normalized_net_income),
-            growth_pct,
-            float(shareholder_payout_ratio),
-            float(required_return),
-            float(terminal_pe),
-            int(horizon_years),
-        )["fair_market_cap"]
-
-    low = -99.999999
-    high = 25.0
     try:
-        while value_at(high) < target and high < 10_000:
-            high = high * 2 + 25
-        if value_at(high) < target:
-            return None
-        for _ in range(200):
-            mid = (low + high) / 2
-            if value_at(mid) < target:
-                low = mid
-            else:
-                high = mid
-    except (OverflowError, ValueError):
+        growth_factor = (
+            target * (1 + float(required_return)) ** int(horizon_years)
+            / (float(latest_net_income) * float(terminal_pe))
+        ) ** (1 / int(horizon_years))
+    except (OverflowError, ValueError, ZeroDivisionError):
         return None
-    result = (low + high) / 2
+    result = (growth_factor - 1) * 100
     return result if _finite(result) else None
 
 
@@ -241,73 +179,24 @@ def _series_by_date(series: pd.Series) -> dict[str, float]:
     return values
 
 
-def extract_financial_profile(
-    income_statement: pd.DataFrame,
-    cashflow_statement: pd.DataFrame,
-) -> dict[str, Any]:
-    """Normalize recent annual earnings and sustainable shareholder payout."""
+def extract_latest_net_income(income_statement: pd.DataFrame) -> dict[str, Any]:
+    """Return the latest reported annual net income without smoothing or skipping losses."""
     net_income_row, net_income_source = select_statement_row(
         income_statement, NET_INCOME_ROWS
     )
     income_by_date = _series_by_date(net_income_row)
-    positive_income = [
-        (date, value)
-        for date, value in sorted(income_by_date.items(), reverse=True)
-        if value > 0
-    ][:3]
-    if len(positive_income) < 2:
-        raise ValueError("at least two positive annual net-income values are required")
+    if not income_by_date:
+        raise ValueError("annual net income unavailable")
 
-    dividend_row, dividend_source = select_statement_row(cashflow_statement, DIVIDEND_ROWS)
-    repurchase_row, repurchase_source = select_statement_row(cashflow_statement, REPURCHASE_ROWS)
-    issuance_row, issuance_source = select_statement_row(cashflow_statement, ISSUANCE_ROWS)
-    net_issuance_row, net_issuance_source = select_statement_row(
-        cashflow_statement, NET_ISSUANCE_ROWS
-    )
-    dividends = _series_by_date(dividend_row)
-    repurchases = _series_by_date(repurchase_row)
-    issuances = _series_by_date(issuance_row)
-    net_issuances = _series_by_date(net_issuance_row)
-
-    payout_ratios: list[float] = []
-    payout_series: dict[str, dict[str, float]] = {}
-    for date, income in positive_income:
-        dividend = abs(_number_or_zero(dividends.get(date)))
-        repurchase = abs(_number_or_zero(repurchases.get(date)))
-        issuance = max(0.0, _number_or_zero(issuances.get(date)))
-        if repurchase == 0 and issuance == 0 and date in net_issuances:
-            net_issuance = _number_or_zero(net_issuances.get(date))
-            if net_issuance < 0:
-                repurchase = abs(net_issuance)
-            elif net_issuance > 0:
-                issuance = net_issuance
-        net_payout = max(0.0, dividend + repurchase - issuance)
-        ratio = net_payout / income
-        payout_ratios.append(ratio)
-        payout_series[date] = {
-            "net_income": income,
-            "cash_dividends": dividend,
-            "share_repurchases": repurchase,
-            "share_issuance": issuance,
-            "net_stock_issuance_source_value": _number_or_zero(net_issuances.get(date)),
-            "net_shareholder_payout": net_payout,
-            "payout_ratio": ratio,
-        }
-
-    normalized_income = float(statistics.median(value for _, value in positive_income))
-    payout_ratio = normalize_payout_ratio(float(statistics.median(payout_ratios)))
+    latest_date = sorted(income_by_date, reverse=True)[0]
     return {
-        "normalized_net_income": normalized_income,
-        "shareholder_payout_ratio": payout_ratio,
-        "net_income_series": {date: value for date, value in positive_income},
-        "payout_series": payout_series,
-        "source_rows": {
-            "net_income": net_income_source,
-            "cash_dividends": dividend_source,
-            "share_repurchases": repurchase_source,
-            "share_issuance": issuance_source,
-            "net_share_issuance": net_issuance_source,
+        "latest_net_income": income_by_date[latest_date],
+        "latest_net_income_date": latest_date,
+        "net_income_series": {
+            date: income_by_date[date]
+            for date in sorted(income_by_date, reverse=True)
         },
+        "source_row": net_income_source,
     }
 
 
@@ -433,32 +322,10 @@ def fetch_asset(
         price, shares, price_source = _resolve_market_data(ticker)
         shares_data = {"total": round(shares), "common": round(shares), "preferred": None}
 
-    profile = extract_financial_profile(ticker.income_stmt, ticker.cash_flow)
-    implied_pct = implied_earnings_cagr(
-        price,
-        shares,
-        profile["normalized_net_income"],
-        profile["shareholder_payout_ratio"],
-        required_return,
-        terminal_pe,
-        horizon_years,
-    )
-    if implied_pct is None:
-        raise ValueError("market-implied earnings CAGR unavailable")
-    calc = calculate_pegr(
-        price,
-        shares,
-        profile["normalized_net_income"],
-        profile["shareholder_payout_ratio"],
-        implied_pct,
-        required_return,
-        terminal_pe,
-        horizon_years,
-    )
-    if calc is None:
-        raise ValueError("PEGR calculation unavailable")
-
-    return {
+    profile = extract_latest_net_income(ticker.income_stmt)
+    latest_net_income = float(profile["latest_net_income"])
+    market_cap = float(price) * float(shares)
+    base_asset = {
         "ticker": ticker_code,
         "yahoo_symbol": yahoo_symbol,
         "name": asset_config.get("name") or ticker_code,
@@ -468,27 +335,61 @@ def fetch_asset(
         "shares": round(shares),
         "shares_common": shares_data.get("common"),
         "shares_preferred": shares_data.get("preferred"),
-        "market_cap": round(calc["market_cap"], 2),
-        "normalized_net_income": round(profile["normalized_net_income"], 2),
-        "shareholder_payout_ratio_pct": round(
-            profile["shareholder_payout_ratio"] * 100, 4
-        ),
+        "market_cap": round(market_cap, 2),
+        "latest_net_income": round(latest_net_income, 2),
+        "latest_net_income_date": profile["latest_net_income_date"],
+        "net_income_series": profile["net_income_series"],
+        "source": {
+            "provider": "Naver Finance + yfinance" if market == "KR" else "yfinance",
+            "price": price_source,
+            "financials": f"yfinance {yahoo_symbol}",
+            "row": profile["source_row"],
+        },
+    }
+    if latest_net_income <= 0:
+        return {
+            **base_asset,
+            "market_implied_cagr_pct": None,
+            "fair_market_cap": None,
+            "fair_price": None,
+            "pegr": None,
+            "gap": None,
+            "earnings_10": None,
+            "terminal_pv": None,
+            "valuation_note": "최신 실제 연간 순이익이 0 이하",
+        }
+
+    implied_pct = implied_earnings_cagr(
+        price,
+        shares,
+        latest_net_income,
+        required_return,
+        terminal_pe,
+        horizon_years,
+    )
+    if implied_pct is None:
+        raise ValueError("market-implied earnings CAGR unavailable")
+    calc = calculate_pegr(
+        price,
+        shares,
+        latest_net_income,
+        implied_pct,
+        required_return,
+        terminal_pe,
+        horizon_years,
+    )
+    if calc is None:
+        raise ValueError("PEGR calculation unavailable")
+
+    return {
+        **base_asset,
         "market_implied_cagr_pct": round(implied_pct, 6),
         "fair_market_cap": round(calc["fair_market_cap"], 2),
         "fair_price": round(calc["fair_price"], 6),
         "pegr": round(calc["pegr"], 12),
         "gap": round(calc["gap"], 12),
         "earnings_10": round(calc["earnings_10"], 2),
-        "payout_pv": round(calc["payout_pv"], 2),
         "terminal_pv": round(calc["terminal_pv"], 2),
-        "net_income_series": profile["net_income_series"],
-        "payout_series": profile["payout_series"],
-        "source": {
-            "provider": "Naver Finance + yfinance" if market == "KR" else "yfinance",
-            "price": price_source,
-            "financials": f"yfinance {yahoo_symbol}",
-            "rows": profile["source_rows"],
-        },
     }
 
 
@@ -527,10 +428,15 @@ def build_payload(config: dict[str, Any]) -> dict[str, Any]:
                         horizon_years,
                     )
                     assets.append(asset)
-                    print(
-                        f"[OK] {ticker_code}: implied CAGR "
-                        f"{asset['market_implied_cagr_pct']:.2f}%"
-                    )
+                    implied = asset.get("market_implied_cagr_pct")
+                    if _finite(implied):
+                        assert implied is not None
+                        print(
+                            f"[OK] {ticker_code}: implied CAGR "
+                            f"{float(implied):.2f}%"
+                        )
+                    else:
+                        print(f"[OK] {ticker_code}: valuation unavailable")
                     break
                 except Exception as exc:  # network/data provider boundary
                     last_error = exc
@@ -539,7 +445,7 @@ def build_payload(config: dict[str, Any]) -> dict[str, Any]:
             else:
                 warning = f"{ticker_code}: {last_error}"
                 warnings.append(warning)
-                if ticker_code in previous:
+                if ticker_code in previous and "latest_net_income" in previous[ticker_code]:
                     fallback = dict(previous[ticker_code])
                     fallback["data_note"] = f"이전 검증 데이터 유지 · {warning}"
                     assets.append(fallback)

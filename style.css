@@ -131,7 +131,7 @@ header {
 
 table {
   width: 100%;
-  min-width: 1186px;
+  min-width: 1094px;
   border-collapse: collapse;
   table-layout: fixed;
   background: var(--panel);
@@ -147,7 +147,6 @@ table {
 .col-price { width: 94px; }
 .col-fair-price { width: 96px; }
 .col-earnings { width: 88px; }
-.col-payout { width: 92px; }
 .col-shares { width: 110px; }
 
 thead tr { border-bottom: 1px solid var(--line); }
@@ -194,7 +193,7 @@ tbody td:nth-child(10) { border-right: 1px solid var(--line-soft); }
 .marketcap-cell { color: #334155; font-weight: 650; }
 .fair-marketcap-cell { color: #1d4ed8; font-weight: 650; }
 .earnings-cell { color: #475569; }
-.payout-cell { color: #0f766e; font-weight: 650; }
+.earnings-period { margin-top: 2px; color: var(--muted); font-size: 0.66rem; line-height: 1.1; }
 .shares-cell { overflow: visible; }
 
 .market-cagr-editor { display: flex; align-items: center; justify-content: flex-end; gap: 3px; }
@@ -208,6 +207,7 @@ tbody td:nth-child(10) { border-right: 1px solid var(--line-soft); }
   font-weight: 680;
 }
 .market-cagr-input:focus { border-color: #f59e0b; background: #fff7d6; outline: 2px solid #fef3c7; }
+.market-cagr-input:disabled { border-color: #cbd5e1; background: #f1f5f9; color: #94a3b8; }
 .market-cagr-reset {
   width: 25px;
   height: 27px;

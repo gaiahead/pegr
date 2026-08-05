@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="총순이익 성장과 주주환원을 반영한 한국·미국 주식 PEGR 가치평가 모니터">
+  <meta name="description" content="최신 실제 연간 순이익 성장을 반영한 한국·미국 주식 PEGR 가치평가 모니터">
   <link rel="icon" href="data:,">
   <title>PEGR 가치평가 모니터</title>
-  <link rel="stylesheet" href="style.css?v=pegr-v02-20260805">
+  <link rel="stylesheet" href="style.css?v=pegr-v03-20260805">
 </head>
 <body>
   <header>
@@ -45,7 +45,7 @@
             <col class="col-name"><col class="col-marketcap"><col class="col-market-eval">
             <col class="col-fair-marketcap"><col class="col-pegr"><col class="col-gap">
             <col class="col-price"><col class="col-fair-price"><col class="col-earnings">
-            <col class="col-earnings"><col class="col-payout"><col class="col-shares">
+            <col class="col-earnings"><col class="col-shares">
           </colgroup>
           <thead>
             <tr class="group-row">
@@ -53,9 +53,9 @@
               <th rowspan="2" title="현재 종가가 내포한 편집 가능한 10년 총순이익 CAGR">시장 평가 ✎</th>
               <th rowspan="2">적정 시가총액</th><th rowspan="2">PEGR</th><th rowspan="2">괴리율</th>
               <th rowspan="2">종가</th><th rowspan="2">적정가</th>
-              <th class="group-head" colspan="2">총순이익</th><th rowspan="2">주주환원율</th><th rowspan="2">주식수</th>
+              <th class="group-head" colspan="2">총순이익</th><th rowspan="2">주식수</th>
             </tr>
-            <tr class="sub-row"><th>기준</th><th>+10년</th></tr>
+            <tr class="sub-row"><th>최근</th><th>+10년</th></tr>
           </thead>
           <tbody id="kr-body"></tbody>
         </table>
@@ -86,7 +86,7 @@
             <col class="col-name"><col class="col-marketcap"><col class="col-market-eval">
             <col class="col-fair-marketcap"><col class="col-pegr"><col class="col-gap">
             <col class="col-price"><col class="col-fair-price"><col class="col-earnings">
-            <col class="col-earnings"><col class="col-payout"><col class="col-shares">
+            <col class="col-earnings"><col class="col-shares">
           </colgroup>
           <thead>
             <tr class="group-row">
@@ -94,9 +94,9 @@
               <th rowspan="2" title="현재 종가가 내포한 편집 가능한 10년 총순이익 CAGR">시장 평가 ✎</th>
               <th rowspan="2">적정 시가총액</th><th rowspan="2">PEGR</th><th rowspan="2">괴리율</th>
               <th rowspan="2">종가</th><th rowspan="2">적정가</th>
-              <th class="group-head" colspan="2">총순이익</th><th rowspan="2">주주환원율</th><th rowspan="2">주식수</th>
+              <th class="group-head" colspan="2">총순이익</th><th rowspan="2">주식수</th>
             </tr>
-            <tr class="sub-row"><th>기준</th><th>+10년</th></tr>
+            <tr class="sub-row"><th>최근</th><th>+10년</th></tr>
           </thead>
           <tbody id="us-body"></tbody>
         </table>
@@ -106,10 +106,10 @@
 
   <div class="note">
     시장 평가 = 현재 종가가 내포한 10년 총순이익 CAGR &nbsp;|&nbsp;
-    PEGR · 적정가 · 괴리율 = 총순이익 성장과 배당·순자사주매입을 포함한 주주환원 기준 &nbsp;|&nbsp;
+    PEGR · 적정가 · 괴리율 = 최신 실제 연간 지배주주순이익의 10년 성장과 10년 후 PER 기준 &nbsp;|&nbsp;
     시장별 요구수익률·10년 후 PER·종목별 시장 평가 수정 후 <strong>저장</strong>
   </div>
 
-  <script src="app.js?v=pegr-v02-20260805"></script>
+  <script src="app.js?v=pegr-v03-20260805"></script>
 </body>
 </html>
