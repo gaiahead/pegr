@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05 16:22 KST",
+  "updated": "2026-08-06 08:17 KST",
   "market_settings": {
     "KR": {
       "currency": "KRW",
@@ -747,11 +747,11 @@
       "name": "Apple",
       "market": "US",
       "currency": "USD",
-      "price": 303.420013,
+      "price": 309.380005,
       "shares": 14594180000,
       "shares_common": 14594180000,
       "shares_preferred": null,
-      "market_cap": 4428166291566.77,
+      "market_cap": 4515147479660.64,
       "latest_net_income": 112010000000.0,
       "latest_net_income_date": "2025-09-30",
       "net_income_series": {
@@ -766,13 +766,13 @@
         "financials": "yfinance AAPL",
         "row": "Net Income Common Stockholders"
       },
-      "market_implied_cagr_pct": 21.193763,
-      "fair_market_cap": 4428166291566.77,
-      "fair_price": 303.420013,
+      "market_implied_cagr_pct": 21.429742,
+      "fair_market_cap": 4515147479660.65,
+      "fair_price": 309.380005,
       "pegr": 1.0,
-      "gap": -0.0,
-      "earnings_10": 765701528721.35,
-      "terminal_pv": 4428166291566.77
+      "gap": 0.0,
+      "earnings_10": 780741982107.29,
+      "terminal_pv": 4515147479660.65
     },
     {
       "ticker": "MSFT",
@@ -780,11 +780,11 @@
       "name": "Microsoft",
       "market": "US",
       "currency": "USD",
-      "price": 487.649994,
+      "price": 492.809998,
       "shares": 7425545491,
       "shares_common": 7425545491,
       "shares_preferred": null,
-      "market_cap": 3621067213364.22,
+      "market_cap": 3659383055290.94,
       "latest_net_income": 133749000000.0,
       "latest_net_income_date": "2026-06-30",
       "net_income_series": {
@@ -799,13 +799,13 @@
         "financials": "yfinance MSFT",
         "row": "Net Income Common Stockholders"
       },
-      "market_implied_cagr_pct": 16.691215,
-      "fair_market_cap": 3621067213364.22,
-      "fair_price": 487.649994,
+      "market_implied_cagr_pct": 16.814107,
+      "fair_market_cap": 3659383055290.94,
+      "fair_price": 492.809998,
       "pegr": 1.0,
-      "gap": -0.0,
-      "earnings_10": 626141052145.25,
-      "terminal_pv": 3621067213364.22
+      "gap": 0.0,
+      "earnings_10": 632766480551.91,
+      "terminal_pv": 3659383055290.94
     },
     {
       "ticker": "BRK-B",
@@ -813,11 +813,11 @@
       "name": "Berkshire Hathaway B",
       "market": "US",
       "currency": "USD",
-      "price": 513.140015,
+      "price": 517.219971,
       "shares": 2156853797,
       "shares_common": 2156853797,
       "shares_preferred": null,
-      "market_cap": 1106767988987.12,
+      "market_cap": 1115567857695.26,
       "latest_net_income": 66968000000.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -832,13 +832,13 @@
         "financials": "yfinance BRK-B",
         "row": "Net Income Common Stockholders"
       },
-      "market_implied_cagr_pct": 11.071461,
-      "fair_market_cap": 1106767988987.12,
-      "fair_price": 513.140015,
+      "market_implied_cagr_pct": 11.159459,
+      "fair_market_cap": 1115567857695.26,
+      "fair_price": 517.219971,
       "pegr": 1.0,
-      "gap": 0.0,
-      "earnings_10": 191378075101.03,
-      "terminal_pv": 1106767988987.12
+      "gap": -0.0,
+      "earnings_10": 192899714641.8,
+      "terminal_pv": 1115567857695.26
     }
   ],
   "warnings": []
