@@ -142,7 +142,7 @@ class MarketCoverageTest(unittest.TestCase):
         "005930", "009150", "000660", "042700", "058470", "000100",
         "035420", "357780", "064760", "079940", "093320", "108320",
         "005290", "086450", "112610", "030190", "058610", "010120",
-        "298040", "267260", "006260", "001440",
+        "298040", "267260", "006260", "001440", "475150",
     ]
 
     def test_config_contains_all_pbgr_tickers_in_order(self):
@@ -151,7 +151,7 @@ class MarketCoverageTest(unittest.TestCase):
         self.assertEqual(config["kr"]["currency"], "KRW")
         self.assertEqual(len(config["us"]["assets"]), 3)
 
-    def test_generated_payload_has_22_kr_and_3_us_assets(self):
+    def test_generated_payload_has_23_kr_and_3_us_assets(self):
         payload = json.loads(Path("pegr_data.json").read_text(encoding="utf-8"))
         kr = [asset for asset in payload["assets"] if asset["market"] == "KR"]
         us = [asset for asset in payload["assets"] if asset["market"] == "US"]
@@ -205,8 +205,8 @@ class UiContractTest(unittest.TestCase):
         self.assertIn('class="market-cagr-input"', app)
         self.assertIn('class="market-cagr-reset"', app)
         self.assertIn("fmtCompactMoney", app)
-        self.assertIn("pegr_data.json?v=pegr-v04-20260806", app)
-        self.assertIn("app.js?v=pegr-v04-20260806", index)
+        self.assertIn("pegr_data.json?v=add-sketernix-20260806", app)
+        self.assertIn("app.js?v=add-sketernix-20260806", index)
         self.assertIn("style.css?v=pegr-v04-20260806", index)
         self.assertIn("<th>최근</th><th>현재</th><th>+10년</th>", index)
         self.assertNotIn("자본총계", index)

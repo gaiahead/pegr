@@ -453,7 +453,7 @@ function renderAllMarkets() {
 
 async function init() {
   try {
-    rawData = await fetch('pegr_data.json?v=pegr-v04-20260806').then(response => {
+    rawData = await fetch('pegr_data.json?v=add-sketernix-20260806').then(response => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.json();
     });
