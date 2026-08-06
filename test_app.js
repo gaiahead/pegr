@@ -3,6 +3,7 @@ const {
   fairMarketCap,
   calculatePegr,
   impliedEarningsCagr,
+  elapsedYears,
   normalizeMarketCagrOverrides,
   removeMarketCagrOverride,
   fmtPrice,
@@ -16,15 +17,22 @@ const fixture = {
   requiredReturnPct: 10,
   terminalPe: 15,
   horizonYears: 10,
+  elapsed: 217 / 365.2425,
 };
+
+assert.ok(Math.abs(
+  elapsedYears('2025-12-31', new Date(2026, 7, 5)) - fixture.elapsed,
+) < 1e-12);
 
 const valuation = fairMarketCap(
   fixture.latestNetIncome, 8, fixture.requiredReturnPct,
-  fixture.terminalPe, fixture.horizonYears,
+  fixture.terminalPe, fixture.horizonYears, fixture.elapsed,
 );
-const expectedEarnings = fixture.latestNetIncome * Math.pow(1.08, fixture.horizonYears);
+const expectedCurrent = fixture.latestNetIncome * Math.pow(1.08, fixture.elapsed);
+const expectedEarnings = expectedCurrent * Math.pow(1.08, fixture.horizonYears);
 const expectedValue = expectedEarnings * fixture.terminalPe
   / Math.pow(1 + fixture.requiredReturnPct / 100, fixture.horizonYears);
+assert.ok(Math.abs(valuation.currentNetIncome - expectedCurrent) < 1e-4);
 assert.ok(Math.abs(valuation.earnings10 - expectedEarnings) < 1e-4);
 assert.ok(Math.abs(valuation.fairMarketCap - expectedValue) < 1e-4);
 assert.equal(valuation.fairMarketCap, valuation.terminalPv);
@@ -32,15 +40,22 @@ assert.equal(Object.hasOwn(valuation, 'payoutPv'), false);
 
 const implied = impliedEarningsCagr(
   fixture.price, fixture.shares, fixture.latestNetIncome,
-  fixture.requiredReturnPct, fixture.terminalPe, fixture.horizonYears,
+  fixture.requiredReturnPct, fixture.terminalPe, fixture.horizonYears, fixture.elapsed,
 );
 assert.ok(Number.isFinite(implied));
 const repriced = calculatePegr(
   fixture.price, fixture.shares, fixture.latestNetIncome,
   implied, fixture.requiredReturnPct, fixture.terminalPe, fixture.horizonYears,
+  fixture.elapsed,
 );
 assert.ok(repriced);
-assert.ok(Math.abs(repriced.pegr - 1) < 1e-9);
+assert.ok(Math.abs(repriced.pegr - fixture.terminalPe) < 1e-9);
+assert.ok(Math.abs(repriced.valuationMultiple - 1) < 1e-9);
+assert.ok(Math.abs(repriced.valuationMultiple - repriced.pegr / fixture.terminalPe) < 1e-9);
+assert.ok(Math.abs(
+  repriced.earnings10
+    - repriced.currentNetIncome * Math.pow(1 + implied / 100, fixture.horizonYears),
+) < 1e-4);
 assert.ok(Math.abs(repriced.fairPrice - fixture.price) < 1e-7);
 assert.equal(calculatePegr(
   fixture.price, fixture.shares, -1,

@@ -2,6 +2,7 @@ import json
 import math
 import tempfile
 import unittest
+from datetime import datetime
 from pathlib import Path
 from unittest.mock import patch
 
@@ -9,6 +10,7 @@ import pandas as pd
 
 from gen_pegr_data import (
     calculate_pegr,
+    elapsed_years,
     extract_latest_net_income,
     fair_market_cap,
     implied_earnings_cagr,
@@ -24,17 +26,35 @@ class PegrCalculationTest(unittest.TestCase):
         self.required_return = 0.10
         self.terminal_pe = 15.0
         self.horizon = 10
+        self.latest_date = "2025-12-31"
+        self.as_of = datetime(2026, 8, 5)
+        self.elapsed = 217 / 365.2425
+
+    def test_elapsed_years_uses_actual_statement_date(self):
+        self.assertAlmostEqual(
+            elapsed_years(self.latest_date, self.as_of),
+            self.elapsed,
+        )
+        with self.assertRaises(ValueError):
+            elapsed_years("2026-12-31", self.as_of)
 
     def test_fair_value_is_discounted_terminal_earnings_only(self):
         valuation = fair_market_cap(
-            self.income, 8.0, self.required_return, self.terminal_pe, self.horizon,
+            self.income, 8.0, self.required_return, self.terminal_pe,
+            self.horizon, self.elapsed,
         )
-        expected_earnings = self.income * (1.08 ** self.horizon)
+        expected_current = self.income * (1.08 ** self.elapsed)
+        expected_earnings = expected_current * (1.08 ** self.horizon)
         expected_value = (
             expected_earnings * self.terminal_pe
             / ((1 + self.required_return) ** self.horizon)
         )
+        self.assertAlmostEqual(valuation["current_net_income"], expected_current)
         self.assertAlmostEqual(valuation["earnings_10"], expected_earnings)
+        self.assertAlmostEqual(
+            valuation["earnings_10"],
+            valuation["current_net_income"] * (1.08 ** self.horizon),
+        )
         self.assertAlmostEqual(valuation["fair_market_cap"], expected_value)
         self.assertEqual(valuation["fair_market_cap"], valuation["terminal_pv"])
         self.assertNotIn("payout_pv", valuation)
@@ -42,26 +62,34 @@ class PegrCalculationTest(unittest.TestCase):
     def test_market_implied_growth_reprices_to_current_market_cap(self):
         implied_pct = implied_earnings_cagr(
             self.price, self.shares, self.income,
-            self.required_return, self.terminal_pe, self.horizon,
+            self.required_return, self.terminal_pe, self.horizon, self.elapsed,
         )
         self.assertIsNotNone(implied_pct)
         assert implied_pct is not None
         calc = calculate_pegr(
             self.price, self.shares, self.income, implied_pct,
-            self.required_return, self.terminal_pe, self.horizon,
+            self.required_return, self.terminal_pe, self.horizon, self.elapsed,
         )
         self.assertIsNotNone(calc)
         assert calc is not None
-        self.assertAlmostEqual(calc["pegr"], 1.0, places=9)
+        self.assertAlmostEqual(calc["pegr"], self.terminal_pe, places=9)
+        self.assertAlmostEqual(calc["valuation_multiple"], 1.0, places=9)
+        self.assertAlmostEqual(
+            calc["valuation_multiple"],
+            calc["pegr"] / self.terminal_pe,
+            places=9,
+        )
         self.assertAlmostEqual(calc["fair_price"], self.price, places=7)
         self.assertAlmostEqual(calc["gap"], 0.0, places=9)
 
     def test_growth_changes_fair_value_monotonically(self):
         low = fair_market_cap(
-            self.income, 5.0, self.required_return, self.terminal_pe, self.horizon,
+            self.income, 5.0, self.required_return, self.terminal_pe,
+            self.horizon, self.elapsed,
         )
         high = fair_market_cap(
-            self.income, 15.0, self.required_return, self.terminal_pe, self.horizon,
+            self.income, 15.0, self.required_return, self.terminal_pe,
+            self.horizon, self.elapsed,
         )
         self.assertGreater(high["fair_market_cap"], low["fair_market_cap"])
         self.assertGreater(high["earnings_10"], low["earnings_10"])
@@ -69,11 +97,12 @@ class PegrCalculationTest(unittest.TestCase):
     def test_invalid_inputs_are_rejected(self):
         self.assertIsNone(calculate_pegr(
             self.price, self.shares, -1, 5,
-            self.required_return, self.terminal_pe, self.horizon,
+            self.required_return, self.terminal_pe, self.horizon, self.elapsed,
         ))
         with self.assertRaises(ValueError):
             fair_market_cap(
                 self.income, -100.0, self.required_return, self.terminal_pe, self.horizon,
+                self.elapsed,
             )
 
 
@@ -138,7 +167,16 @@ class MarketCoverageTest(unittest.TestCase):
             self.assertNotIn("shareholder_payout_ratio_pct", asset)
             self.assertNotIn("payout_pv", asset)
             self.assertNotIn("payout_series", asset)
-            self.assertAlmostEqual(asset["pegr"], 1.0, places=6)
+            terminal_pe = payload["market_settings"][asset["market"]]["terminal_pe"]
+            self.assertAlmostEqual(asset["pegr"], terminal_pe, places=6)
+            self.assertAlmostEqual(asset["valuation_multiple"], 1.0, places=6)
+            self.assertGreater(asset["current_net_income"], 0)
+            growth = 1 + asset["market_implied_cagr_pct"] / 100
+            self.assertAlmostEqual(
+                asset["earnings_10"],
+                asset["current_net_income"] * growth ** 10,
+                delta=max(1.0, asset["earnings_10"] * 1e-8),
+            )
 
 
 class UiContractTest(unittest.TestCase):
@@ -167,9 +205,10 @@ class UiContractTest(unittest.TestCase):
         self.assertIn('class="market-cagr-input"', app)
         self.assertIn('class="market-cagr-reset"', app)
         self.assertIn("fmtCompactMoney", app)
-        self.assertIn("pegr_data.json?v=pegr-v03-20260805", app)
-        self.assertIn("app.js?v=pegr-v03-20260805", index)
-        self.assertIn("style.css?v=pegr-v03-20260805", index)
+        self.assertIn("pegr_data.json?v=pegr-v04-20260806", app)
+        self.assertIn("app.js?v=pegr-v04-20260806", index)
+        self.assertIn("style.css?v=pegr-v04-20260806", index)
+        self.assertIn("<th>최근</th><th>현재</th><th>+10년</th>", index)
         self.assertNotIn("자본총계", index)
         self.assertNotIn("PBGR", index)
         self.assertLess(index.index("시가총액</th>"), index.index("시장 평가 ✎"))

@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="최신 실제 연간 순이익 성장을 반영한 한국·미국 주식 PEGR 가치평가 모니터">
+  <meta name="description" content="최신 실제 연간 순이익 성장을 반영한 한국·미국 주식 PER형 PEGR 가치평가 모니터">
   <link rel="icon" href="data:,">
   <title>PEGR 가치평가 모니터</title>
-  <link rel="stylesheet" href="style.css?v=pegr-v03-20260805">
+  <link rel="stylesheet" href="style.css?v=pegr-v04-20260806">
 </head>
 <body>
   <header>
     <div class="header-left">
       <h1>PEGR 가치평가 모니터</h1>
-      <p>Price to Earnings Growth Ratio · <span id="updated"></span> 기준</p>
+      <p>Growth-adjusted Year-10 P/E · <span id="updated"></span> 기준</p>
     </div>
     <div class="header-right">
       <span class="status-msg" id="status-msg"></span>
@@ -45,17 +45,17 @@
             <col class="col-name"><col class="col-marketcap"><col class="col-market-eval">
             <col class="col-fair-marketcap"><col class="col-pegr"><col class="col-gap">
             <col class="col-price"><col class="col-fair-price"><col class="col-earnings">
-            <col class="col-earnings"><col class="col-shares">
+            <col class="col-earnings"><col class="col-earnings"><col class="col-shares">
           </colgroup>
           <thead>
             <tr class="group-row">
               <th rowspan="2">종목</th><th rowspan="2">시가총액</th>
               <th rowspan="2" title="현재 종가가 내포한 편집 가능한 10년 총순이익 CAGR">시장 평가 ✎</th>
-              <th rowspan="2">적정 시가총액</th><th rowspan="2">PEGR</th><th rowspan="2">괴리율</th>
+              <th rowspan="2">적정 시가총액</th><th rowspan="2" title="현재 가격이 요구하는 성장 조정 10년 후 PER">PEGR</th><th rowspan="2">괴리율</th>
               <th rowspan="2">종가</th><th rowspan="2">적정가</th>
-              <th class="group-head" colspan="2">총순이익</th><th rowspan="2">주식수</th>
+              <th class="group-head" colspan="3">총순이익</th><th rowspan="2">주식수</th>
             </tr>
-            <tr class="sub-row"><th>최근</th><th>+10년</th></tr>
+            <tr class="sub-row"><th>최근</th><th>현재</th><th>+10년</th></tr>
           </thead>
           <tbody id="kr-body"></tbody>
         </table>
@@ -86,17 +86,17 @@
             <col class="col-name"><col class="col-marketcap"><col class="col-market-eval">
             <col class="col-fair-marketcap"><col class="col-pegr"><col class="col-gap">
             <col class="col-price"><col class="col-fair-price"><col class="col-earnings">
-            <col class="col-earnings"><col class="col-shares">
+            <col class="col-earnings"><col class="col-earnings"><col class="col-shares">
           </colgroup>
           <thead>
             <tr class="group-row">
               <th rowspan="2">종목</th><th rowspan="2">시가총액</th>
               <th rowspan="2" title="현재 종가가 내포한 편집 가능한 10년 총순이익 CAGR">시장 평가 ✎</th>
-              <th rowspan="2">적정 시가총액</th><th rowspan="2">PEGR</th><th rowspan="2">괴리율</th>
+              <th rowspan="2">적정 시가총액</th><th rowspan="2" title="현재 가격이 요구하는 성장 조정 10년 후 PER">PEGR</th><th rowspan="2">괴리율</th>
               <th rowspan="2">종가</th><th rowspan="2">적정가</th>
-              <th class="group-head" colspan="2">총순이익</th><th rowspan="2">주식수</th>
+              <th class="group-head" colspan="3">총순이익</th><th rowspan="2">주식수</th>
             </tr>
-            <tr class="sub-row"><th>최근</th><th>+10년</th></tr>
+            <tr class="sub-row"><th>최근</th><th>현재</th><th>+10년</th></tr>
           </thead>
           <tbody id="us-body"></tbody>
         </table>
@@ -105,11 +105,13 @@
   </main>
 
   <div class="note">
-    시장 평가 = 현재 종가가 내포한 10년 총순이익 CAGR &nbsp;|&nbsp;
-    PEGR · 적정가 · 괴리율 = 최신 실제 연간 지배주주순이익의 10년 성장과 10년 후 PER 기준 &nbsp;|&nbsp;
+    최근 = 최신 실제 연간 지배주주순이익 &nbsp;|&nbsp;
+    시장 평가 = 현재 종가가 내포한 총순이익 CAGR &nbsp;|&nbsp;
+    PEGR = 현재 가격이 요구하는 성장 조정 10년 후 PER &nbsp;|&nbsp;
+    적정가 · 괴리율 = 기준 10년 후 PER과 PEGR 비교 &nbsp;|&nbsp;
     시장별 요구수익률·10년 후 PER·종목별 시장 평가 수정 후 <strong>저장</strong>
   </div>
 
-  <script src="app.js?v=pegr-v03-20260805"></script>
+  <script src="app.js?v=pegr-v04-20260806"></script>
 </body>
 </html>

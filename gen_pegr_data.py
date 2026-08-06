@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate PEGR data for Korean and US-listed companies.
 
-PEGR is this project's latest-earnings growth valuation ratio. It is not the
-conventional PEG ratio.
+PEGR is this project's growth-adjusted year-10 P/E. It is not the conventional
+PEG ratio.
 """
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ import math
 import re
 import time
 import urllib.request
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
@@ -22,6 +22,7 @@ OUTPUT_PATH = Path("pegr_data.json")
 KST = timezone(timedelta(hours=9))
 HTTP_TIMEOUT = 15
 NAVER_HEADERS = {"User-Agent": "Mozilla/5.0", "Accept-Language": "ko-KR"}
+DAYS_PER_YEAR = 365.2425
 
 NET_INCOME_ROWS = (
     "Net Income Common Stockholders",
@@ -41,6 +42,24 @@ def _positive(value: Any) -> bool:
     return _finite(value) and float(value) > 0
 
 
+def elapsed_years(
+    statement_date: str,
+    as_of: Optional[date | datetime] = None,
+) -> float:
+    """Return actual years elapsed from a financial-statement date."""
+    start = datetime.strptime(statement_date, "%Y-%m-%d").date()
+    if as_of is None:
+        end = datetime.now(KST).date()
+    elif isinstance(as_of, datetime):
+        end = as_of.date()
+    else:
+        end = as_of
+    days = (end - start).days
+    if days < 0:
+        raise ValueError("statement date cannot be after valuation date")
+    return days / DAYS_PER_YEAR
+
+
 
 def fair_market_cap(
     latest_net_income: float,
@@ -48,14 +67,16 @@ def fair_market_cap(
     required_return: float,
     terminal_pe: float,
     horizon_years: int = 10,
+    elapsed_years_value: float = 0,
 ) -> dict[str, float]:
-    """Return the discounted year-end market cap from latest annual earnings."""
+    """Return current earnings and discounted year-10 terminal value."""
     values = (
         latest_net_income,
         earnings_cagr_pct,
         required_return,
         terminal_pe,
         horizon_years,
+        elapsed_years_value,
     )
     if not all(_finite(value) for value in values):
         raise ValueError("all valuation inputs must be finite")
@@ -69,16 +90,23 @@ def fair_market_cap(
         raise ValueError("terminal PE must be positive")
     if int(horizon_years) != horizon_years or horizon_years <= 0:
         raise ValueError("horizon years must be a positive integer")
+    if elapsed_years_value < 0:
+        raise ValueError("elapsed years cannot be negative")
 
     growth = earnings_cagr_pct / 100
-    earnings_t = latest_net_income * (1 + growth) ** int(horizon_years)
+    current_net_income = latest_net_income * (1 + growth) ** elapsed_years_value
+    earnings_t = current_net_income * (1 + growth) ** int(horizon_years)
     terminal_value = earnings_t * terminal_pe
     terminal_pv = terminal_value / (1 + required_return) ** int(horizon_years)
-    if not all(_finite(v) and v >= 0 for v in (terminal_pv, earnings_t)):
+    if not all(
+        _finite(value) and value >= 0
+        for value in (terminal_pv, current_net_income, earnings_t)
+    ):
         raise ValueError("valuation result is invalid")
     return {
         "fair_market_cap": terminal_pv,
         "terminal_pv": terminal_pv,
+        "current_net_income": current_net_income,
         "earnings_10": earnings_t,
     }
 
@@ -91,8 +119,9 @@ def calculate_pegr(
     required_return: float,
     terminal_pe: float,
     horizon_years: int = 10,
+    elapsed_years_value: float = 0,
 ) -> Optional[dict[str, float]]:
-    """Calculate fair value, PEGR and gap for a current equity price."""
+    """Calculate fair value and growth-adjusted year-10 P/E for a price."""
     if not (_positive(price) and _positive(shares) and _positive(latest_net_income)):
         return None
     try:
@@ -102,21 +131,26 @@ def calculate_pegr(
             required_return,
             terminal_pe,
             horizon_years,
+            elapsed_years_value,
         )
     except ValueError:
         return None
 
     market_cap = float(price) * float(shares)
     fair_cap = valuation["fair_market_cap"]
-    if not _positive(fair_cap):
+    earnings_t = valuation["earnings_10"]
+    if not (_positive(fair_cap) and _positive(earnings_t)):
         return None
-    pegr = market_cap / fair_cap
+    discount_growth = (1 + required_return) ** int(horizon_years)
+    pegr = market_cap * discount_growth / earnings_t
+    valuation_multiple = market_cap / fair_cap
     return {
         **valuation,
         "market_cap": market_cap,
         "fair_price": fair_cap / float(shares),
         "pegr": pegr,
-        "gap": 1 / pegr - 1,
+        "valuation_multiple": valuation_multiple,
+        "gap": fair_cap / market_cap - 1,
     }
 
 
@@ -127,6 +161,7 @@ def implied_earnings_cagr(
     required_return: float,
     terminal_pe: float,
     horizon_years: int = 10,
+    elapsed_years_value: float = 0,
 ) -> Optional[float]:
     """Solve the earnings CAGR that reprices to current market cap."""
     if not (_positive(price) and _positive(shares) and _positive(latest_net_income)):
@@ -137,13 +172,16 @@ def implied_earnings_cagr(
         return None
     if int(horizon_years) != horizon_years or horizon_years <= 0:
         return None
+    if not _finite(elapsed_years_value) or elapsed_years_value < 0:
+        return None
 
     target = float(price) * float(shares)
+    projection_years = int(horizon_years) + float(elapsed_years_value)
     try:
         growth_factor = (
             target * (1 + float(required_return)) ** int(horizon_years)
             / (float(latest_net_income) * float(terminal_pe))
-        ) ** (1 / int(horizon_years))
+        ) ** (1 / projection_years)
     except (OverflowError, ValueError, ZeroDivisionError):
         return None
     result = (growth_factor - 1) * 100
@@ -324,6 +362,7 @@ def fetch_asset(
 
     profile = extract_latest_net_income(ticker.income_stmt)
     latest_net_income = float(profile["latest_net_income"])
+    elapsed = elapsed_years(profile["latest_net_income_date"])
     market_cap = float(price) * float(shares)
     base_asset = {
         "ticker": ticker_code,
@@ -338,6 +377,7 @@ def fetch_asset(
         "market_cap": round(market_cap, 2),
         "latest_net_income": round(latest_net_income, 2),
         "latest_net_income_date": profile["latest_net_income_date"],
+        "elapsed_years": round(elapsed, 12),
         "net_income_series": profile["net_income_series"],
         "source": {
             "provider": "Naver Finance + yfinance" if market == "KR" else "yfinance",
@@ -353,7 +393,9 @@ def fetch_asset(
             "fair_market_cap": None,
             "fair_price": None,
             "pegr": None,
+            "valuation_multiple": None,
             "gap": None,
+            "current_net_income": None,
             "earnings_10": None,
             "terminal_pv": None,
             "valuation_note": "최신 실제 연간 순이익이 0 이하",
@@ -366,9 +408,11 @@ def fetch_asset(
         required_return,
         terminal_pe,
         horizon_years,
+        elapsed,
     )
     if implied_pct is None:
         raise ValueError("market-implied earnings CAGR unavailable")
+    implied_pct = round(implied_pct, 10)
     calc = calculate_pegr(
         price,
         shares,
@@ -377,17 +421,20 @@ def fetch_asset(
         required_return,
         terminal_pe,
         horizon_years,
+        elapsed,
     )
     if calc is None:
         raise ValueError("PEGR calculation unavailable")
 
     return {
         **base_asset,
-        "market_implied_cagr_pct": round(implied_pct, 6),
+        "market_implied_cagr_pct": implied_pct,
         "fair_market_cap": round(calc["fair_market_cap"], 2),
         "fair_price": round(calc["fair_price"], 6),
         "pegr": round(calc["pegr"], 12),
+        "valuation_multiple": round(calc["valuation_multiple"], 12),
         "gap": round(calc["gap"], 12),
+        "current_net_income": round(calc["current_net_income"], 2),
         "earnings_10": round(calc["earnings_10"], 2),
         "terminal_pv": round(calc["terminal_pv"], 2),
     }

@@ -131,7 +131,7 @@ header {
 
 table {
   width: 100%;
-  min-width: 1094px;
+  min-width: 1168px;
   border-collapse: collapse;
   table-layout: fixed;
   background: var(--panel);
@@ -142,7 +142,7 @@ table {
 .col-marketcap { width: 86px; }
 .col-market-eval { width: 126px; }
 .col-fair-marketcap { width: 104px; }
-.col-pegr { width: 70px; }
+.col-pegr { width: 80px; }
 .col-gap { width: 82px; }
 .col-price { width: 94px; }
 .col-fair-price { width: 96px; }
@@ -185,7 +185,7 @@ td:first-child { overflow: visible; text-align: left; white-space: normal; }
 tbody td:nth-child(3),
 tbody td:nth-child(9) { border-left: 1px solid var(--line-soft); }
 tbody td:nth-child(3),
-tbody td:nth-child(10) { border-right: 1px solid var(--line-soft); }
+tbody td:nth-child(11) { border-right: 1px solid var(--line-soft); }
 
 .name { color: #0f172a; font-size: 0.84rem; font-weight: 720; line-height: 1.2; }
 .ticker { margin-top: 2px; color: var(--muted); font-size: 0.72rem; line-height: 1.15; }
