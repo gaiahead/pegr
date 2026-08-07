@@ -1,109 +1,59 @@
 import json
-import math
-import tempfile
 import unittest
-from datetime import datetime
 from pathlib import Path
-from unittest.mock import patch
 
 import pandas as pd
 
 from gen_pegr_data import (
     calculate_pegr,
-    elapsed_years,
+    calculate_per,
     extract_latest_net_income,
-    fair_market_cap,
-    implied_earnings_cagr,
+    implied_eps_cagr,
     select_statement_row,
 )
 
 
 class PegrCalculationTest(unittest.TestCase):
-    def setUp(self):
-        self.price = 100.0
-        self.shares = 1_000_000_000
-        self.income = 10_000_000_000
-        self.required_return = 0.10
-        self.terminal_pe = 15.0
-        self.horizon = 10
-        self.latest_date = "2025-12-31"
-        self.as_of = datetime(2026, 8, 5)
-        self.elapsed = 217 / 365.2425
+    def test_original_peg_examples(self):
+        cases = [
+            (15.0, 15.0, 1.0),
+            (20.0, 10.0, 2.0),
+            (10.0, 20.0, 0.5),
+        ]
+        for per, growth, expected in cases:
+            with self.subTest(per=per, growth=growth):
+                calc = calculate_pegr(
+                    price=per,
+                    shares=100.0,
+                    latest_net_income=100.0,
+                    eps_cagr_pct=growth,
+                )
+                self.assertIsNotNone(calc)
+                assert calc is not None
+                self.assertAlmostEqual(calc["current_per"], per)
+                self.assertAlmostEqual(calc["pegr"], expected)
 
-    def test_elapsed_years_uses_actual_statement_date(self):
-        self.assertAlmostEqual(
-            elapsed_years(self.latest_date, self.as_of),
-            self.elapsed,
-        )
-        with self.assertRaises(ValueError):
-            elapsed_years("2026-12-31", self.as_of)
-
-    def test_fair_value_is_discounted_terminal_earnings_only(self):
-        valuation = fair_market_cap(
-            self.income, 8.0, self.required_return, self.terminal_pe,
-            self.horizon, self.elapsed,
-        )
-        expected_current = self.income * (1.08 ** self.elapsed)
-        expected_earnings = expected_current * (1.08 ** self.horizon)
-        expected_value = (
-            expected_earnings * self.terminal_pe
-            / ((1 + self.required_return) ** self.horizon)
-        )
-        self.assertAlmostEqual(valuation["current_net_income"], expected_current)
-        self.assertAlmostEqual(valuation["earnings_10"], expected_earnings)
-        self.assertAlmostEqual(
-            valuation["earnings_10"],
-            valuation["current_net_income"] * (1.08 ** self.horizon),
-        )
-        self.assertAlmostEqual(valuation["fair_market_cap"], expected_value)
-        self.assertEqual(valuation["fair_market_cap"], valuation["terminal_pv"])
-        self.assertNotIn("payout_pv", valuation)
-
-    def test_market_implied_growth_reprices_to_current_market_cap(self):
-        implied_pct = implied_earnings_cagr(
-            self.price, self.shares, self.income,
-            self.required_return, self.terminal_pe, self.horizon, self.elapsed,
-        )
-        self.assertIsNotNone(implied_pct)
-        assert implied_pct is not None
-        calc = calculate_pegr(
-            self.price, self.shares, self.income, implied_pct,
-            self.required_return, self.terminal_pe, self.horizon, self.elapsed,
-        )
+    def test_per_uses_current_price_shares_and_latest_income(self):
+        calc = calculate_per(price=25.0, shares=200.0, latest_net_income=250.0)
         self.assertIsNotNone(calc)
         assert calc is not None
-        self.assertAlmostEqual(calc["pegr"], self.terminal_pe, places=9)
-        self.assertAlmostEqual(calc["valuation_multiple"], 1.0, places=9)
-        self.assertAlmostEqual(
-            calc["valuation_multiple"],
-            calc["pegr"] / self.terminal_pe,
-            places=9,
-        )
-        self.assertAlmostEqual(calc["fair_price"], self.price, places=7)
-        self.assertAlmostEqual(calc["gap"], 0.0, places=9)
+        self.assertEqual(calc["market_cap"], 5_000.0)
+        self.assertEqual(calc["latest_eps"], 1.25)
+        self.assertEqual(calc["current_per"], 20.0)
 
-    def test_growth_changes_fair_value_monotonically(self):
-        low = fair_market_cap(
-            self.income, 5.0, self.required_return, self.terminal_pe,
-            self.horizon, self.elapsed,
-        )
-        high = fair_market_cap(
-            self.income, 15.0, self.required_return, self.terminal_pe,
-            self.horizon, self.elapsed,
-        )
-        self.assertGreater(high["fair_market_cap"], low["fair_market_cap"])
-        self.assertGreater(high["earnings_10"], low["earnings_10"])
+    def test_implied_growth_equals_current_per_and_reprices_pegr_to_one(self):
+        implied = implied_eps_cagr(25.0, 200.0, 250.0)
+        self.assertEqual(implied, 20.0)
+        calc = calculate_pegr(25.0, 200.0, 250.0, implied)
+        self.assertIsNotNone(calc)
+        assert calc is not None
+        self.assertAlmostEqual(calc["pegr"], 1.0)
 
-    def test_invalid_inputs_are_rejected(self):
-        self.assertIsNone(calculate_pegr(
-            self.price, self.shares, -1, 5,
-            self.required_return, self.terminal_pe, self.horizon, self.elapsed,
-        ))
-        with self.assertRaises(ValueError):
-            fair_market_cap(
-                self.income, -100.0, self.required_return, self.terminal_pe, self.horizon,
-                self.elapsed,
-            )
+    def test_nonpositive_income_or_growth_is_not_valuatable(self):
+        self.assertIsNone(calculate_per(10, 100, 0))
+        self.assertIsNone(calculate_pegr(10, 100, 100, 0))
+        self.assertIsNone(calculate_pegr(10, 100, 100, -5))
+        self.assertIsNone(implied_eps_cagr(10, 100, -1))
 
 
 class LatestNetIncomeTest(unittest.TestCase):
@@ -113,7 +63,6 @@ class LatestNetIncomeTest(unittest.TestCase):
             [[120.0, 100.0, 80.0, -20.0]],
             index=["Net Income Common Stockholders"], columns=cols,
         )
-
 
     def test_statement_row_uses_priority(self):
         row, name = select_statement_row(
@@ -144,12 +93,21 @@ class MarketCoverageTest(unittest.TestCase):
         "005290", "086450", "112610", "030190", "058610", "010120",
         "298040", "267260", "006260", "001440", "475150",
     ]
+    RETIRED_FIELDS = {
+        "fair_market_cap", "fair_price", "gap", "valuation_multiple",
+        "current_net_income", "earnings_10", "terminal_pv", "elapsed_years",
+        "market_implied_cagr_pct",
+    }
 
     def test_config_contains_all_pbgr_tickers_in_order(self):
         config = json.loads(Path("config.json").read_text(encoding="utf-8"))
         self.assertEqual(list(config["kr"]["assets"]), self.KR_TICKERS)
         self.assertEqual(config["kr"]["currency"], "KRW")
         self.assertEqual(len(config["us"]["assets"]), 3)
+        for market in ("kr", "us"):
+            self.assertNotIn("required_return", config[market])
+            self.assertNotIn("terminal_pe", config[market])
+            self.assertNotIn("horizon_years", config[market])
 
     def test_generated_payload_has_23_kr_and_3_us_assets(self):
         payload = json.loads(Path("pegr_data.json").read_text(encoding="utf-8"))
@@ -158,61 +116,58 @@ class MarketCoverageTest(unittest.TestCase):
         self.assertEqual([asset["ticker"] for asset in kr], self.KR_TICKERS)
         self.assertEqual(len(us), 3)
         self.assertEqual(payload["warnings"], [])
+        for settings in payload["market_settings"].values():
+            self.assertEqual(set(settings), {"currency"})
         for asset in payload["assets"]:
             self.assertGreater(asset["price"], 0)
             self.assertGreater(asset["shares"], 0)
             self.assertGreater(asset["latest_net_income"], 0)
-            self.assertRegex(asset["latest_net_income_date"], r"^\d{4}-\d{2}-\d{2}$")
-            self.assertNotIn("normalized_net_income", asset)
-            self.assertNotIn("shareholder_payout_ratio_pct", asset)
-            self.assertNotIn("payout_pv", asset)
-            self.assertNotIn("payout_series", asset)
-            terminal_pe = payload["market_settings"][asset["market"]]["terminal_pe"]
-            self.assertAlmostEqual(asset["pegr"], terminal_pe, places=6)
-            self.assertAlmostEqual(asset["valuation_multiple"], 1.0, places=6)
-            self.assertGreater(asset["current_net_income"], 0)
-            growth = 1 + asset["market_implied_cagr_pct"] / 100
+            self.assertGreater(asset["latest_eps"], 0)
+            self.assertGreater(asset["current_per"], 0)
             self.assertAlmostEqual(
-                asset["earnings_10"],
-                asset["current_net_income"] * growth ** 10,
-                delta=max(1.0, asset["earnings_10"] * 1e-8),
+                asset["market_implied_eps_cagr_pct"],
+                asset["current_per"],
+                places=9,
             )
+            self.assertAlmostEqual(asset["pegr"], 1.0, places=9)
+            self.assertTrue(self.RETIRED_FIELDS.isdisjoint(asset))
 
 
 class UiContractTest(unittest.TestCase):
-    def test_pegr_labels_and_files(self):
+    def test_original_pegr_labels_and_files(self):
         index = Path("index.html").read_text(encoding="utf-8")
         app = Path("app.js").read_text(encoding="utf-8")
         generator = Path("gen_pegr_data.py").read_text(encoding="utf-8")
         readme = Path("README.md").read_text(encoding="utf-8")
         combined = index + app + generator
-        self.assertIn("PEGR", index)
-        self.assertIn("시장 평가", index)
-        self.assertIn("최신 실제 연간 지배주주순이익", index)
+        documentation = combined + readme
+
+        self.assertIn("PEGR = PER ÷ 예상 EPS CAGR", index)
+        self.assertIn("예상 EPS CAGR ✎", index)
+        self.assertIn("현재 PER", index)
         self.assertIn("최신 실제 연간 지배주주순이익", readme)
-        self.assertNotIn("주주환원율", combined + readme)
-        self.assertNotIn("normalized_net_income", combined)
-        self.assertNotIn("shareholder_payout_ratio", combined)
-        self.assertNotIn("ticker.cash_flow", generator)
-        self.assertNotIn("statistics.median", generator)
-        self.assertTrue(Path("style.css").exists())
-        self.assertTrue(Path("app.js").exists())
+        self.assertIn("PER 15 / 예상 EPS CAGR 15% = PEGR 1.000", readme)
+        for retired in (
+            "요구수익률", "10년 후 PER", "적정 시가총액", "적정가", "괴리율",
+            "성장 조정 10년 후 PER", "Growth-adjusted Year-10 P/E",
+        ):
+            self.assertNotIn(retired, combined)
+        self.assertNotIn("fairMarketCap", app)
+        self.assertNotIn("impliedEarningsCagr", app)
+        self.assertNotIn("market_implied_cagr_pct", generator)
+        self.assertNotIn("required_return", generator)
+        self.assertNotIn("terminal_pe", generator)
+        self.assertNotIn("horizon_years", generator)
 
         self.assertIn('id="kr-body"', index)
         self.assertIn('id="us-body"', index)
-        self.assertIn('id="req-kr"', index)
-        self.assertIn('id="req-us"', index)
-        self.assertIn('class="market-cagr-input"', app)
-        self.assertIn('class="market-cagr-reset"', app)
-        self.assertIn("fmtCompactMoney", app)
-        self.assertIn("pegr_data.json?v=add-sketernix-20260806", app)
-        self.assertIn("app.js?v=add-sketernix-20260806", index)
-        self.assertIn("style.css?v=pegr-v04-20260806", index)
-        self.assertIn("<th>최근</th><th>현재</th><th>+10년</th>", index)
-        self.assertNotIn("자본총계", index)
-        self.assertNotIn("PBGR", index)
-        self.assertLess(index.index("시가총액</th>"), index.index("시장 평가 ✎"))
-        self.assertLess(index.index("시장 평가 ✎"), index.index("적정 시가총액</th>"))
+        self.assertIn('class="eps-cagr-input"', app)
+        self.assertIn('class="eps-cagr-reset"', app)
+        self.assertIn("pegr_data.json?v=pegr-v05-20260807", app)
+        self.assertIn("app.js?v=pegr-v05-20260807", index)
+        self.assertIn("style.css?v=pegr-v05-20260807", index)
+        self.assertLess(index.index("현재 PER</th>"), index.index("예상 EPS CAGR ✎"))
+        self.assertLess(index.index("예상 EPS CAGR ✎"), index.index("PEGR</th>"))
 
 
 if __name__ == "__main__":

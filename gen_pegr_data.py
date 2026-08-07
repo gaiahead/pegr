@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Generate PEGR data for Korean and US-listed companies.
+"""Generate conventional PEG/PEGR data for Korean and US-listed companies.
 
-PEGR is this project's growth-adjusted year-10 P/E. It is not the conventional
-PEG ratio.
+PEGR follows the standard PEG convention:
+
+    PEGR = current P/E / expected EPS CAGR expressed as a percent number
 """
 from __future__ import annotations
 
@@ -11,7 +12,7 @@ import math
 import re
 import time
 import urllib.request
-from datetime import date, datetime, timezone, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
@@ -22,7 +23,6 @@ OUTPUT_PATH = Path("pegr_data.json")
 KST = timezone(timedelta(hours=9))
 HTTP_TIMEOUT = 15
 NAVER_HEADERS = {"User-Agent": "Mozilla/5.0", "Accept-Language": "ko-KR"}
-DAYS_PER_YEAR = 365.2425
 
 NET_INCOME_ROWS = (
     "Net Income Common Stockholders",
@@ -42,72 +42,25 @@ def _positive(value: Any) -> bool:
     return _finite(value) and float(value) > 0
 
 
-def elapsed_years(
-    statement_date: str,
-    as_of: Optional[date | datetime] = None,
-) -> float:
-    """Return actual years elapsed from a financial-statement date."""
-    start = datetime.strptime(statement_date, "%Y-%m-%d").date()
-    if as_of is None:
-        end = datetime.now(KST).date()
-    elif isinstance(as_of, datetime):
-        end = as_of.date()
-    else:
-        end = as_of
-    days = (end - start).days
-    if days < 0:
-        raise ValueError("statement date cannot be after valuation date")
-    return days / DAYS_PER_YEAR
-
-
-
-def fair_market_cap(
+def calculate_per(
+    price: float,
+    shares: float,
     latest_net_income: float,
-    earnings_cagr_pct: float,
-    required_return: float,
-    terminal_pe: float,
-    horizon_years: int = 10,
-    elapsed_years_value: float = 0,
-) -> dict[str, float]:
-    """Return current earnings and discounted year-10 terminal value."""
-    values = (
-        latest_net_income,
-        earnings_cagr_pct,
-        required_return,
-        terminal_pe,
-        horizon_years,
-        elapsed_years_value,
-    )
-    if not all(_finite(value) for value in values):
-        raise ValueError("all valuation inputs must be finite")
-    if latest_net_income <= 0:
-        raise ValueError("latest net income must be positive")
-    if earnings_cagr_pct <= -100:
-        raise ValueError("earnings CAGR must be greater than -100%")
-    if required_return <= -1:
-        raise ValueError("required return must be greater than -100%")
-    if terminal_pe <= 0:
-        raise ValueError("terminal PE must be positive")
-    if int(horizon_years) != horizon_years or horizon_years <= 0:
-        raise ValueError("horizon years must be a positive integer")
-    if elapsed_years_value < 0:
-        raise ValueError("elapsed years cannot be negative")
-
-    growth = earnings_cagr_pct / 100
-    current_net_income = latest_net_income * (1 + growth) ** elapsed_years_value
-    earnings_t = current_net_income * (1 + growth) ** int(horizon_years)
-    terminal_value = earnings_t * terminal_pe
-    terminal_pv = terminal_value / (1 + required_return) ** int(horizon_years)
-    if not all(
-        _finite(value) and value >= 0
-        for value in (terminal_pv, current_net_income, earnings_t)
-    ):
-        raise ValueError("valuation result is invalid")
+) -> Optional[dict[str, float]]:
+    """Calculate current market cap, latest EPS, and current P/E."""
+    if not (_positive(price) and _positive(shares) and _positive(latest_net_income)):
+        return None
+    market_cap = float(price) * float(shares)
+    latest_eps = float(latest_net_income) / float(shares)
+    if not _positive(latest_eps):
+        return None
+    current_per = float(price) / latest_eps
+    if not _positive(current_per):
+        return None
     return {
-        "fair_market_cap": terminal_pv,
-        "terminal_pv": terminal_pv,
-        "current_net_income": current_net_income,
-        "earnings_10": earnings_t,
+        "market_cap": market_cap,
+        "latest_eps": latest_eps,
+        "current_per": current_per,
     }
 
 
@@ -115,77 +68,30 @@ def calculate_pegr(
     price: float,
     shares: float,
     latest_net_income: float,
-    earnings_cagr_pct: float,
-    required_return: float,
-    terminal_pe: float,
-    horizon_years: int = 10,
-    elapsed_years_value: float = 0,
+    eps_cagr_pct: float,
 ) -> Optional[dict[str, float]]:
-    """Calculate fair value and growth-adjusted year-10 P/E for a price."""
-    if not (_positive(price) and _positive(shares) and _positive(latest_net_income)):
+    """Calculate conventional PEGR = current P/E / expected EPS CAGR(%)."""
+    per = calculate_per(price, shares, latest_net_income)
+    if per is None or not _positive(eps_cagr_pct):
         return None
-    try:
-        valuation = fair_market_cap(
-            latest_net_income,
-            earnings_cagr_pct,
-            required_return,
-            terminal_pe,
-            horizon_years,
-            elapsed_years_value,
-        )
-    except ValueError:
+    pegr = per["current_per"] / float(eps_cagr_pct)
+    if not _positive(pegr):
         return None
-
-    market_cap = float(price) * float(shares)
-    fair_cap = valuation["fair_market_cap"]
-    earnings_t = valuation["earnings_10"]
-    if not (_positive(fair_cap) and _positive(earnings_t)):
-        return None
-    discount_growth = (1 + required_return) ** int(horizon_years)
-    pegr = market_cap * discount_growth / earnings_t
-    valuation_multiple = market_cap / fair_cap
     return {
-        **valuation,
-        "market_cap": market_cap,
-        "fair_price": fair_cap / float(shares),
+        **per,
+        "eps_cagr_pct": float(eps_cagr_pct),
         "pegr": pegr,
-        "valuation_multiple": valuation_multiple,
-        "gap": fair_cap / market_cap - 1,
     }
 
 
-def implied_earnings_cagr(
+def implied_eps_cagr(
     price: float,
     shares: float,
     latest_net_income: float,
-    required_return: float,
-    terminal_pe: float,
-    horizon_years: int = 10,
-    elapsed_years_value: float = 0,
 ) -> Optional[float]:
-    """Solve the earnings CAGR that reprices to current market cap."""
-    if not (_positive(price) and _positive(shares) and _positive(latest_net_income)):
-        return None
-    if not _finite(required_return) or required_return <= -1:
-        return None
-    if not _positive(terminal_pe):
-        return None
-    if int(horizon_years) != horizon_years or horizon_years <= 0:
-        return None
-    if not _finite(elapsed_years_value) or elapsed_years_value < 0:
-        return None
-
-    target = float(price) * float(shares)
-    projection_years = int(horizon_years) + float(elapsed_years_value)
-    try:
-        growth_factor = (
-            target * (1 + float(required_return)) ** int(horizon_years)
-            / (float(latest_net_income) * float(terminal_pe))
-        ) ** (1 / projection_years)
-    except (OverflowError, ValueError, ZeroDivisionError):
-        return None
-    result = (growth_factor - 1) * 100
-    return result if _finite(result) else None
+    """Return the EPS CAGR percentage that makes conventional PEGR equal 1.0."""
+    per = calculate_per(price, shares, latest_net_income)
+    return per["current_per"] if per is not None else None
 
 
 def select_statement_row(
@@ -218,7 +124,7 @@ def _series_by_date(series: pd.Series) -> dict[str, float]:
 
 
 def extract_latest_net_income(income_statement: pd.DataFrame) -> dict[str, Any]:
-    """Return the latest reported annual net income without smoothing or skipping losses."""
+    """Return the latest actual annual net income without smoothing or skipping losses."""
     net_income_row, net_income_source = select_statement_row(
         income_statement, NET_INCOME_ROWS
     )
@@ -272,7 +178,10 @@ def _fetch_listed_shares(code: str) -> Optional[int]:
     return int(match.group(1).replace(",", "")) if match else None
 
 
-def get_naver_shares(code: str, preferred_code: Optional[str] = None) -> dict[str, Optional[int]]:
+def get_naver_shares(
+    code: str,
+    preferred_code: Optional[str] = None,
+) -> dict[str, Optional[int]]:
     common = _fetch_listed_shares(code)
     preferred = _fetch_listed_shares(preferred_code) if preferred_code else None
     total = (common or 0) + (preferred or 0)
@@ -337,9 +246,6 @@ def fetch_asset(
     asset_config: dict[str, Any],
     market: str,
     currency: str,
-    required_return: float,
-    terminal_pe: float,
-    horizon_years: int,
 ) -> dict[str, Any]:
     import yfinance as yf
 
@@ -358,11 +264,14 @@ def fetch_asset(
         price_source = "Naver Finance polling closePrice"
     else:
         price, shares, price_source = _resolve_market_data(ticker)
-        shares_data = {"total": round(shares), "common": round(shares), "preferred": None}
+        shares_data = {
+            "total": round(shares),
+            "common": round(shares),
+            "preferred": None,
+        }
 
     profile = extract_latest_net_income(ticker.income_stmt)
     latest_net_income = float(profile["latest_net_income"])
-    elapsed = elapsed_years(profile["latest_net_income_date"])
     market_cap = float(price) * float(shares)
     base_asset = {
         "ticker": ticker_code,
@@ -377,7 +286,6 @@ def fetch_asset(
         "market_cap": round(market_cap, 2),
         "latest_net_income": round(latest_net_income, 2),
         "latest_net_income_date": profile["latest_net_income_date"],
-        "elapsed_years": round(elapsed, 12),
         "net_income_series": profile["net_income_series"],
         "source": {
             "provider": "Naver Finance + yfinance" if market == "KR" else "yfinance",
@@ -386,57 +294,30 @@ def fetch_asset(
             "row": profile["source_row"],
         },
     }
-    if latest_net_income <= 0:
+
+    per = calculate_per(price, shares, latest_net_income)
+    if per is None:
         return {
             **base_asset,
-            "market_implied_cagr_pct": None,
-            "fair_market_cap": None,
-            "fair_price": None,
+            "latest_eps": None,
+            "current_per": None,
+            "market_implied_eps_cagr_pct": None,
             "pegr": None,
-            "valuation_multiple": None,
-            "gap": None,
-            "current_net_income": None,
-            "earnings_10": None,
-            "terminal_pv": None,
             "valuation_note": "최신 실제 연간 순이익이 0 이하",
         }
 
-    implied_pct = implied_earnings_cagr(
-        price,
-        shares,
-        latest_net_income,
-        required_return,
-        terminal_pe,
-        horizon_years,
-        elapsed,
-    )
-    if implied_pct is None:
-        raise ValueError("market-implied earnings CAGR unavailable")
-    implied_pct = round(implied_pct, 10)
-    calc = calculate_pegr(
-        price,
-        shares,
-        latest_net_income,
-        implied_pct,
-        required_return,
-        terminal_pe,
-        horizon_years,
-        elapsed,
-    )
+    implied_pct = implied_eps_cagr(price, shares, latest_net_income)
+    assert implied_pct is not None
+    calc = calculate_pegr(price, shares, latest_net_income, implied_pct)
     if calc is None:
         raise ValueError("PEGR calculation unavailable")
 
     return {
         **base_asset,
-        "market_implied_cagr_pct": implied_pct,
-        "fair_market_cap": round(calc["fair_market_cap"], 2),
-        "fair_price": round(calc["fair_price"], 6),
+        "latest_eps": round(calc["latest_eps"], 12),
+        "current_per": round(calc["current_per"], 12),
+        "market_implied_eps_cagr_pct": round(implied_pct, 12),
         "pegr": round(calc["pegr"], 12),
-        "valuation_multiple": round(calc["valuation_multiple"], 12),
-        "gap": round(calc["gap"], 12),
-        "current_net_income": round(calc["current_net_income"], 2),
-        "earnings_10": round(calc["earnings_10"], 2),
-        "terminal_pv": round(calc["terminal_pv"], 2),
     }
 
 
@@ -444,21 +325,15 @@ def build_payload(config: dict[str, Any]) -> dict[str, Any]:
     previous = load_previous_assets()
     assets: list[dict[str, Any]] = []
     warnings: list[str] = []
-    market_settings: dict[str, dict[str, Any]] = {}
+    market_settings: dict[str, dict[str, str]] = {}
     expected: list[str] = []
 
     for market_key, market_config in config.items():
         market = str(market_config.get("market") or market_key).upper()
-        currency = str(market_config.get("currency") or ("KRW" if market == "KR" else "USD"))
-        required_return = float(market_config["required_return"])
-        terminal_pe = float(market_config["terminal_pe"])
-        horizon_years = int(market_config.get("horizon_years", 10))
-        market_settings[market] = {
-            "currency": currency,
-            "required_return": required_return,
-            "terminal_pe": terminal_pe,
-            "horizon_years": horizon_years,
-        }
+        currency = str(
+            market_config.get("currency") or ("KRW" if market == "KR" else "USD")
+        )
+        market_settings[market] = {"currency": currency}
 
         for ticker_code, asset_config in market_config["assets"].items():
             expected.append(ticker_code)
@@ -470,20 +345,18 @@ def build_payload(config: dict[str, Any]) -> dict[str, Any]:
                         asset_config,
                         market,
                         currency,
-                        required_return,
-                        terminal_pe,
-                        horizon_years,
                     )
                     assets.append(asset)
-                    implied = asset.get("market_implied_cagr_pct")
-                    if _finite(implied):
-                        assert implied is not None
+                    pegr = asset.get("pegr")
+                    current_per = asset.get("current_per")
+                    if _finite(pegr) and _finite(current_per):
+                        assert pegr is not None and current_per is not None
                         print(
-                            f"[OK] {ticker_code}: implied CAGR "
-                            f"{float(implied):.2f}%"
+                            f"[OK] {ticker_code}: PER {float(current_per):.2f}, "
+                            f"PEGR {float(pegr):.3f}"
                         )
                     else:
-                        print(f"[OK] {ticker_code}: valuation unavailable")
+                        print(f"[OK] {ticker_code}: PEGR unavailable")
                     break
                 except Exception as exc:  # network/data provider boundary
                     last_error = exc
@@ -492,8 +365,9 @@ def build_payload(config: dict[str, Any]) -> dict[str, Any]:
             else:
                 warning = f"{ticker_code}: {last_error}"
                 warnings.append(warning)
-                if ticker_code in previous and "latest_net_income" in previous[ticker_code]:
-                    fallback = dict(previous[ticker_code])
+                previous_asset = previous.get(ticker_code)
+                if previous_asset and "latest_net_income" in previous_asset:
+                    fallback = dict(previous_asset)
                     fallback["data_note"] = f"이전 검증 데이터 유지 · {warning}"
                     assets.append(fallback)
                     print(f"[WARN] {warning}; previous data preserved")

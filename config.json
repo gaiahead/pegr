@@ -2,9 +2,6 @@
   "kr": {
     "market": "KR",
     "currency": "KRW",
-    "required_return": 0.10,
-    "terminal_pe": 15.0,
-    "horizon_years": 10,
     "assets": {
       "005930": { "name": "삼성전자", "yahoo_symbol": "005930.KS", "preferred_ticker": "005935" },
       "009150": { "name": "삼성전기", "yahoo_symbol": "009150.KS" },
@@ -34,9 +31,6 @@
   "us": {
     "market": "US",
     "currency": "USD",
-    "required_return": 0.10,
-    "terminal_pe": 15.0,
-    "horizon_years": 10,
     "assets": {
       "AAPL": { "name": "Apple" },
       "MSFT": { "name": "Microsoft" },
