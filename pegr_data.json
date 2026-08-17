@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-17 07:35 KST",
+  "updated": "2026-08-18 07:39 KST",
   "market_settings": {
     "KR": {
       "currency": "KRW"
@@ -703,11 +703,11 @@
       "name": "Apple",
       "market": "US",
       "currency": "USD",
-      "price": 305.26001,
+      "price": 305.929993,
       "shares": 14594180000,
       "shares_common": 14594180000,
       "shares_preferred": null,
-      "market_cap": 4455019529321.29,
+      "market_cap": 4464797380509.03,
       "latest_net_income": 112010000000.0,
       "latest_net_income_date": "2025-09-30",
       "net_income_series": {
@@ -723,8 +723,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 7.674977285466,
-      "current_per": 39.773408886004,
-      "market_implied_eps_cagr_pct": 39.773408886004,
+      "current_per": 39.860703334604,
+      "market_implied_eps_cagr_pct": 39.860703334604,
       "pegr": 1.0
     },
     {
@@ -733,11 +733,11 @@
       "name": "Microsoft",
       "market": "US",
       "currency": "USD",
-      "price": 496.880005,
+      "price": 495.399994,
       "shares": 7425545491,
       "shares_common": 7425545491,
       "shares_preferred": null,
-      "market_cap": 3689605079825.63,
+      "market_cap": 3678615190919.47,
       "latest_net_income": 133749000000.0,
       "latest_net_income_date": "2026-06-30",
       "net_income_series": {
@@ -753,8 +753,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 18.012010048569,
-      "current_per": 27.586038623284,
-      "market_implied_eps_cagr_pct": 27.586038623284,
+      "current_per": 27.503870615253,
+      "market_implied_eps_cagr_pct": 27.503870615253,
       "pegr": 1.0
     },
     {
@@ -763,11 +763,11 @@
       "name": "Berkshire Hathaway B",
       "market": "US",
       "currency": "USD",
-      "price": 506.929993,
+      "price": 504.029999,
       "shares": 2140709794,
       "shares_common": 2140709794,
       "shares_preferred": null,
-      "market_cap": 1085190000193.39,
+      "market_cap": 1078981954856.65,
       "latest_net_income": 66968000000.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -783,8 +783,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 31.283081988833,
-      "current_per": 16.204605187454,
-      "market_implied_eps_cagr_pct": 16.204605187454,
+      "current_per": 16.111903518944,
+      "market_implied_eps_cagr_pct": 16.111903518944,
       "pegr": 1.0
     }
   ],
