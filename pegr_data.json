@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-30 09:18 KST",
+  "updated": "2026-08-31 09:36 KST",
   "market_settings": {
     "KR": {
       "currency": "KRW"
@@ -15,11 +15,11 @@
       "name": "삼성전자",
       "market": "KR",
       "currency": "KRW",
-      "price": 257000.0,
+      "price": 252000.0,
       "shares": 6648649811,
       "shares_common": 5846278608,
       "shares_preferred": 802371203,
-      "market_cap": 1708703001427000.0,
+      "market_cap": 1675459752372000.0,
       "latest_net_income": 44260956000000.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -35,8 +35,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 6657.134494701694,
-      "current_per": 38.605198708925,
-      "market_implied_eps_cagr_pct": 38.605198708925,
+      "current_per": 37.854124804082,
+      "market_implied_eps_cagr_pct": 37.854124804082,
       "pegr": 1.0
     },
     {
@@ -45,11 +45,11 @@
       "name": "삼성전기",
       "market": "KR",
       "currency": "KRW",
-      "price": 1421000.0,
+      "price": 1397000.0,
       "shares": 74693696,
       "shares_common": 74693696,
       "shares_preferred": null,
-      "market_cap": 106139742016000.0,
+      "market_cap": 104347093312000.0,
       "latest_net_income": 706113165450.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -65,8 +65,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 9453.450602444414,
-      "current_per": 150.315483706295,
-      "market_implied_eps_cagr_pct": 150.315483706295,
+      "current_per": 147.776728175717,
+      "market_implied_eps_cagr_pct": 147.776728175717,
       "pegr": 1.0
     },
     {
@@ -75,11 +75,11 @@
       "name": "SK하이닉스",
       "market": "KR",
       "currency": "KRW",
-      "price": 1653000.0,
+      "price": 1628000.0,
       "shares": 730492365,
       "shares_common": 730492365,
       "shares_preferred": null,
-      "market_cap": 1207503879345000.0,
+      "market_cap": 1189241570220000.0,
       "latest_net_income": 42919287000000.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -95,8 +95,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 58753.91592901864,
-      "current_per": 28.134294946349,
-      "market_implied_eps_cagr_pct": 28.134294946349,
+      "current_per": 27.708791393016,
+      "market_implied_eps_cagr_pct": 27.708791393016,
       "pegr": 1.0
     },
     {
@@ -105,11 +105,11 @@
       "name": "한미반도체",
       "market": "KR",
       "currency": "KRW",
-      "price": 219500.0,
+      "price": 212500.0,
       "shares": 95312200,
       "shares_common": 95312200,
       "shares_preferred": null,
-      "market_cap": 20921027900000.0,
+      "market_cap": 20253842500000.0,
       "latest_net_income": 214007548410.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -125,8 +125,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 2245.332165347143,
-      "current_per": 97.758364391517,
-      "market_implied_eps_cagr_pct": 97.758364391517,
+      "current_per": 94.640785572653,
+      "market_implied_eps_cagr_pct": 94.640785572653,
       "pegr": 1.0
     },
     {
@@ -135,11 +135,11 @@
       "name": "리노공업",
       "market": "KR",
       "currency": "KRW",
-      "price": 66800.0,
+      "price": 65200.0,
       "shares": 76211850,
       "shares_common": 76211850,
       "shares_preferred": null,
-      "market_cap": 5090951580000.0,
+      "market_cap": 4969012620000.0,
       "latest_net_income": 151960670400.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -155,8 +155,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 1993.924440884193,
-      "current_per": 33.501770995082,
-      "market_implied_eps_cagr_pct": 33.501770995082,
+      "current_per": 32.699333366458,
+      "market_implied_eps_cagr_pct": 32.699333366458,
       "pegr": 1.0
     },
     {
@@ -165,11 +165,11 @@
       "name": "유한양행",
       "market": "KR",
       "currency": "KRW",
-      "price": 84900.0,
+      "price": 82500.0,
       "shares": 74764121,
       "shares_common": 73615781,
       "shares_preferred": 1148340,
-      "market_cap": 6347473872900.0,
+      "market_cap": 6168039982500.0,
       "latest_net_income": 194079171660.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -185,8 +185,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 2595.886490259144,
-      "current_per": 32.705590293944,
-      "market_implied_eps_cagr_pct": 32.705590293944,
+      "current_per": 31.781050638992,
+      "market_implied_eps_cagr_pct": 31.781050638992,
       "pegr": 1.0
     },
     {
@@ -195,11 +195,11 @@
       "name": "NAVER",
       "market": "KR",
       "currency": "KRW",
-      "price": 220500.0,
+      "price": 214500.0,
       "shares": 152076491,
       "shares_common": 152076491,
       "shares_preferred": null,
-      "market_cap": 33532866265500.0,
+      "market_cap": 32620407319500.0,
       "latest_net_income": 1953214734950.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -215,8 +215,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 12843.633635326318,
-      "current_per": 17.168038754509,
-      "market_implied_eps_cagr_pct": 17.168038754509,
+      "current_per": 16.70088123738,
+      "market_implied_eps_cagr_pct": 16.70088123738,
       "pegr": 1.0
     },
     {
@@ -225,11 +225,11 @@
       "name": "솔브레인",
       "market": "KR",
       "currency": "KRW",
-      "price": 346500.0,
+      "price": 339500.0,
       "shares": 7778566,
       "shares_common": 7778566,
       "shares_preferred": null,
-      "market_cap": 2695273119000.0,
+      "market_cap": 2640823157000.0,
       "latest_net_income": 79057915020.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -245,8 +245,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 10163.559069885117,
-      "current_per": 34.092388071683,
-      "market_implied_eps_cagr_pct": 34.092388071683,
+      "current_per": 33.403652959124,
+      "market_implied_eps_cagr_pct": 33.403652959124,
       "pegr": 1.0
     },
     {
@@ -255,11 +255,11 @@
       "name": "티씨케이",
       "market": "KR",
       "currency": "KRW",
-      "price": 238500.0,
+      "price": 237000.0,
       "shares": 11179416,
       "shares_common": 11179416,
       "shares_preferred": null,
-      "market_cap": 2666290716000.0,
+      "market_cap": 2649521592000.0,
       "latest_net_income": 69902724550.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -275,8 +275,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 6252.806456974139,
-      "current_per": 38.142872587074,
-      "market_implied_eps_cagr_pct": 38.142872587074,
+      "current_per": 37.902980306652,
+      "market_implied_eps_cagr_pct": 37.902980306652,
       "pegr": 1.0
     },
     {
@@ -285,11 +285,11 @@
       "name": "가비아",
       "market": "KR",
       "currency": "KRW",
-      "price": 45850.0,
+      "price": 45700.0,
       "shares": 13420684,
       "shares_common": 13420684,
       "shares_preferred": null,
-      "market_cap": 615338361400.0,
+      "market_cap": 613325258800.0,
       "latest_net_income": 15793656880.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -305,8 +305,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 1176.814600507694,
-      "current_per": 38.961107365782,
-      "market_implied_eps_cagr_pct": 38.961107365782,
+      "current_per": 38.833644637213,
+      "market_implied_eps_cagr_pct": 38.833644637213,
       "pegr": 1.0
     },
     {
@@ -315,11 +315,11 @@
       "name": "케이아이엔엑스",
       "market": "KR",
       "currency": "KRW",
-      "price": 152300.0,
+      "price": 146600.0,
       "shares": 4880000,
       "shares_common": 4880000,
       "shares_preferred": null,
-      "market_cap": 743224000000.0,
+      "market_cap": 715408000000.0,
       "latest_net_income": 17098641320.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -335,8 +335,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 3503.819942622951,
-      "current_per": 43.466845469801,
-      "market_implied_eps_cagr_pct": 43.466845469801,
+      "current_per": 41.840049546112,
+      "market_implied_eps_cagr_pct": 41.840049546112,
       "pegr": 1.0
     },
     {
@@ -345,11 +345,11 @@
       "name": "LX세미콘",
       "market": "KR",
       "currency": "KRW",
-      "price": 37200.0,
+      "price": 36450.0,
       "shares": 16264300,
       "shares_common": 16264300,
       "shares_preferred": null,
-      "market_cap": 605031960000.0,
+      "market_cap": 592833735000.0,
       "latest_net_income": 82633081340.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -365,8 +365,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 5080.641733121008,
-      "current_per": 7.321909702369,
-      "market_implied_eps_cagr_pct": 7.321909702369,
+      "current_per": 7.174290555144,
+      "market_implied_eps_cagr_pct": 7.174290555144,
       "pegr": 1.0
     },
     {
@@ -375,11 +375,11 @@
       "name": "동진쎄미켐",
       "market": "KR",
       "currency": "KRW",
-      "price": 42400.0,
+      "price": 41300.0,
       "shares": 50970126,
       "shares_common": 50970126,
       "shares_preferred": null,
-      "market_cap": 2161133342400.0,
+      "market_cap": 2105066203800.0,
       "latest_net_income": 99069889890.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -395,8 +395,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 1943.685402896591,
-      "current_per": 21.814229780608,
-      "market_implied_eps_cagr_pct": 21.814229780608,
+      "current_per": 21.248294574036,
+      "market_implied_eps_cagr_pct": 21.248294574036,
       "pegr": 1.0
     },
     {
@@ -405,11 +405,11 @@
       "name": "동국제약",
       "market": "KR",
       "currency": "KRW",
-      "price": 21500.0,
+      "price": 22300.0,
       "shares": 45230420,
       "shares_common": 45230420,
       "shares_preferred": null,
-      "market_cap": 972454030000.0,
+      "market_cap": 1008638366000.0,
       "latest_net_income": 66020354860.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -425,8 +425,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 1459.64496593222,
-      "current_per": 14.729609255542,
-      "market_implied_eps_cagr_pct": 14.729609255542,
+      "current_per": 15.277687739469,
+      "market_implied_eps_cagr_pct": 15.277687739469,
       "pegr": 1.0
     },
     {
@@ -435,11 +435,11 @@
       "name": "씨에스윈드",
       "market": "KR",
       "currency": "KRW",
-      "price": 49400.0,
+      "price": 48950.0,
       "shares": 42171403,
       "shares_common": 42171403,
       "shares_preferred": null,
-      "market_cap": 2083267308200.0,
+      "market_cap": 2064290176850.0,
       "latest_net_income": 34701475320.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -455,8 +455,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 822.867461156083,
-      "current_per": 60.033969420295,
-      "market_implied_eps_cagr_pct": 60.033969420295,
+      "current_per": 59.487101277802,
+      "market_implied_eps_cagr_pct": 59.487101277802,
       "pegr": 1.0
     },
     {
@@ -465,11 +465,11 @@
       "name": "NICE평가정보",
       "market": "KR",
       "currency": "KRW",
-      "price": 16010.0,
+      "price": 15870.0,
       "shares": 58911527,
       "shares_common": 58911527,
       "shares_preferred": null,
-      "market_cap": 943173547270.0,
+      "market_cap": 934925933490.0,
       "latest_net_income": 77165549360.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -485,8 +485,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 1309.854849968496,
-      "current_per": 12.222728343057,
-      "market_implied_eps_cagr_pct": 12.222728343057,
+      "current_per": 12.11584627135,
+      "market_implied_eps_cagr_pct": 12.11584627135,
       "pegr": 1.0
     },
     {
@@ -495,11 +495,11 @@
       "name": "에스피지",
       "market": "KR",
       "currency": "KRW",
-      "price": 92700.0,
+      "price": 91500.0,
       "shares": 22177360,
       "shares_common": 22177360,
       "shares_preferred": null,
-      "market_cap": 2055841272000.0,
+      "market_cap": 2029228440000.0,
       "latest_net_income": 9133325300.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -515,8 +515,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 411.831043009628,
-      "current_per": 225.092308055643,
-      "market_implied_eps_cagr_pct": 225.092308055643,
+      "current_per": 222.178491770133,
+      "market_implied_eps_cagr_pct": 222.178491770133,
       "pegr": 1.0
     },
     {
@@ -525,11 +525,11 @@
       "name": "LS ELECTRIC",
       "market": "KR",
       "currency": "KRW",
-      "price": 214500.0,
+      "price": 205250.0,
       "shares": 150000000,
       "shares_common": 150000000,
       "shares_preferred": null,
-      "market_cap": 32175000000000.0,
+      "market_cap": 30787500000000.0,
       "latest_net_income": 286623001980.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -545,8 +545,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 1910.8200132,
-      "current_per": 112.255470697516,
-      "market_implied_eps_cagr_pct": 112.255470697516,
+      "current_per": 107.414617066038,
+      "market_implied_eps_cagr_pct": 107.414617066038,
       "pegr": 1.0
     },
     {
@@ -555,11 +555,11 @@
       "name": "효성중공업",
       "market": "KR",
       "currency": "KRW",
-      "price": 3153000.0,
+      "price": 3043000.0,
       "shares": 9324548,
       "shares_common": 9324548,
       "shares_preferred": null,
-      "market_cap": 29400299844000.0,
+      "market_cap": 28374599564000.0,
       "latest_net_income": 519893715250.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -575,8 +575,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 55755.379805005025,
-      "current_per": 56.550596750073,
-      "market_implied_eps_cagr_pct": 56.550596750073,
+      "current_per": 54.577692962408,
+      "market_implied_eps_cagr_pct": 54.577692962408,
       "pegr": 1.0
     },
     {
@@ -585,11 +585,11 @@
       "name": "HD현대일렉트릭",
       "market": "KR",
       "currency": "KRW",
-      "price": 814000.0,
+      "price": 788000.0,
       "shares": 36047135,
       "shares_common": 36047135,
       "shares_preferred": null,
-      "market_cap": 29342367890000.0,
+      "market_cap": 28405142380000.0,
       "latest_net_income": 732605395230.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -605,8 +605,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 20323.540143481583,
-      "current_per": 40.052077258847,
-      "market_implied_eps_cagr_pct": 40.052077258847,
+      "current_per": 38.772772579817,
+      "market_implied_eps_cagr_pct": 38.772772579817,
       "pegr": 1.0
     },
     {
@@ -615,11 +615,11 @@
       "name": "LS",
       "market": "KR",
       "currency": "KRW",
-      "price": 313000.0,
+      "price": 303000.0,
       "shares": 31200000,
       "shares_common": 31200000,
       "shares_preferred": null,
-      "market_cap": 9765600000000.0,
+      "market_cap": 9453600000000.0,
       "latest_net_income": 270815000000.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -635,8 +635,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 8679.96794871795,
-      "current_per": 36.06004098739,
-      "market_implied_eps_cagr_pct": 36.06004098739,
+      "current_per": 34.907963000572,
+      "market_implied_eps_cagr_pct": 34.907963000572,
       "pegr": 1.0
     },
     {
@@ -645,11 +645,11 @@
       "name": "대한전선",
       "market": "KR",
       "currency": "KRW",
-      "price": 29700.0,
+      "price": 29400.0,
       "shares": 195992596,
       "shares_common": 195992596,
       "shares_preferred": null,
-      "market_cap": 5820980101200.0,
+      "market_cap": 5762182322400.0,
       "latest_net_income": 84220667290.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -665,8 +665,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 429.713514739098,
-      "current_per": 69.115815494033,
-      "market_implied_eps_cagr_pct": 69.115815494033,
+      "current_per": 68.417675943588,
+      "market_implied_eps_cagr_pct": 68.417675943588,
       "pegr": 1.0
     },
     {
@@ -675,11 +675,11 @@
       "name": "SK이터닉스",
       "market": "KR",
       "currency": "KRW",
-      "price": 55800.0,
+      "price": 54100.0,
       "shares": 34067004,
       "shares_common": 34067004,
       "shares_preferred": null,
-      "market_cap": 1900938823200.0,
+      "market_cap": 1843024916400.0,
       "latest_net_income": 30721781360.0,
       "latest_net_income_date": "2025-12-31",
       "net_income_series": {
@@ -693,8 +693,8 @@
         "row": "Net Income Common Stockholders"
       },
       "latest_eps": 901.804613050211,
-      "current_per": 61.875930986054,
-      "market_implied_eps_cagr_pct": 61.875930986054,
+      "current_per": 59.990821977518,
+      "market_implied_eps_cagr_pct": 59.990821977518,
       "pegr": 1.0
     },
     {
